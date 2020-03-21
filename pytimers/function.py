@@ -1,4 +1,4 @@
-from decorator_timer import DecoratedCallable, DecoratorTimer
+from .decorator_timer import DecoratedCallable, DecoratorTimer
 
 
 class DecoratedFunction(DecoratedCallable):
