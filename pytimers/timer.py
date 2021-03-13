@@ -14,6 +14,14 @@ class Timer:
         log_template: Optional[str] = None,
         log_level: Optional[int] = logging.INFO,
     ):
+        """Initializes Timer object with custom configuration parameters.
+
+        :param log_template: String template to be used to format log message. The template is used in
+            String.Template object. There are two placeholders allowed ${name} and ${duration}. These will be replaced
+            during actual logging for timed instance name and time duration respectively.
+        :param log_level: Logging level as understood by standard logging library.
+        """
+
         self._start_times = []
         self._name = None
         self._names = []
@@ -23,7 +31,13 @@ class Timer:
         self.logger = logging.getLogger(__name__)
         self.log_level = log_level
 
-    def name(self, name: str):
+    def named(self, name: str) -> "Timer":
+        """Sets name for the current timer. This method should be used to name code block for timing. The name of
+        the block is later used for logging.
+
+        :param name: Timer name.
+        :return: Returns self.
+        """
         self._name = name
         return self
 
@@ -40,7 +54,7 @@ class Timer:
         label = self._names.pop()
         if label is None:
             label = "code block"
-        self.log_message(end_time - start_time, label)
+        self._log_message(end_time - start_time, label)
 
     @wrapt.decorator
     def __call__(self, wrapped, instance, args, kwargs):
@@ -61,10 +75,10 @@ class Timer:
         start_time = default_timer()
         output = wrapped(*args, **kwargs)
         end_time = default_timer()
-        self.log_message(end_time - start_time, f"{callable_type}{wrapped.__name__}")
+        self._log_message(end_time - start_time, f"{callable_type}{wrapped.__name__}")
         return output
 
-    def log_message(self, duration: float, name: str):
+    def _log_message(self, duration: float, name: str):
         self.logger.log(
             self.log_level,
             self.message_template.substitute(

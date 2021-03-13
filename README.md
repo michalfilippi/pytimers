@@ -83,7 +83,7 @@ from pytimers import timer
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
-    with timer.name("data processing pipeline"):
+    with timer.named("data processing pipeline"):
         print("Hello from code block.")
         sleep(1)
 ```
@@ -106,10 +106,10 @@ from pytimers import timer
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
-    with timer.name("data collecting pipeline"):
+    with timer.named("data collecting pipeline"):
         print("Hello from code block n.1.")
         sleep(1)
-        with timer.name("data processing pipeline"):
+        with timer.named("data processing pipeline"):
             print("Hello from code block n.2.")
             sleep(1)
 ```
