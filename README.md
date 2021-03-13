@@ -112,7 +112,7 @@ INFO:timer:Finished data processing pipeline in 1.0008160540019162s.
 INFO:timer:Finished data collecting pipeline in 2.0029643359885085s.
 ```
 
-## When default setting is not enough
+## Timer Custom Configuration
 
 ```python
 import logging
