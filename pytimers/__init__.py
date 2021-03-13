@@ -1,3 +1,6 @@
-from .function import function_timer, FunctionTimer
-from .method import method_timer, MethodTimer
-from block_timer import BlockTimer
+from .timer import timer, Timer
+
+__all__ = [
+    timer,
+    Timer,
+]
