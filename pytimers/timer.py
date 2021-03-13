@@ -63,7 +63,7 @@ class Timer:
         if instance is None:
             if inspect.isclass(wrapped):
                 # Decorator was applied to a class.
-                raise TypeError("Timer is not designed to run as a class decorator.")
+                callable_type = "class "
             else:
                 # Decorator was applied to a function or static method.
                 callable_type = "function "
