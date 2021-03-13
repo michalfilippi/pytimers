@@ -1,7 +1,8 @@
 # PyTimers
-Python micro library for easy to use code timing with times logged using the standard library.
+Python micro library for easy to use code timing with the elapsed times logged using the standard
+ logging library.
 
-Requires Python3.6+.
+Requires Python 3.6+.
 
 ## How to Install
 
@@ -46,7 +47,10 @@ PyTimers leverage python library [wrapt](https://wrapt.readthedocs.io/en/latest/
   not changing the callable signature in any way.
 
 ### Block Timer
-
+  
+To measure time of any code not enclosed in a callable object you can use timer context manager
+ as follows.
+  
 ```python
 import logging
 from time import sleep
@@ -67,6 +71,8 @@ Hello from code block.
 INFO:timer:Finished code block in 1.0027356049977243s.
 ```
 
+Block of code can also be named to increase log readability.
+
 ```python
 import logging
 from time import sleep
@@ -86,6 +92,9 @@ if __name__ == '__main__':
 Hello from code block.
 INFO:timer:Finished data processing pipeline in 1.0051407059945632s.
 ```
+
+Timer context manager also allows you to stack context managers freely without a worry of
+ interference. 
 
 ```python
 import logging
@@ -113,6 +122,9 @@ INFO:timer:Finished data collecting pipeline in 2.0029643359885085s.
 ```
 
 ## Timer Custom Configuration
+
+If you need to customize the log message template or logging level you can create your own timer
+ using provided `Timer` class.
 
 ```python
 import logging
