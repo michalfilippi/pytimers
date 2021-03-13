@@ -137,6 +137,10 @@ WARNING:timer:Processing function func took 1.0028993980085943s.
 
 ## Build Status
 
-![Lint and Tests](https://github.com/michalfilippi/pytimers/workflows/Lint%20and%20Tests/badge.svg)
+![tests](https://github.com/michalfilippi/pytimers/workflows/tests/badge.svg)
 
-![Black Formatter](https://github.com/michalfilippi/pytimers/workflows/autoblack/badge.svg)
+![flake8](https://github.com/michalfilippi/pytimers/workflows/flake8/badge.svg)
+
+![black](https://github.com/michalfilippi/pytimers/workflows/black/badge.svg)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
