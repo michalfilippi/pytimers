@@ -1,5 +1,7 @@
 # PyTimers
-Python library for simple and easy to use code timing.
+Python micro library for easy to use code timing.
+
+Requires Python3.6+.
 
 ## How to Install
 
@@ -143,4 +145,12 @@ WARNING:timer:Processing function func took 1.0028993980085943s.
 
 ![black](https://github.com/michalfilippi/pytimers/workflows/black/badge.svg)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## PyPi
+
+[![PyPI version fury.io](https://badge.fury.io/py/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+
+[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+
+[![PyPI format](https://img.shields.io/pypi/format/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
