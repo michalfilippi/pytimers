@@ -1,5 +1,5 @@
 # PyTimers
-Python micro library for easy to use code timing.
+Python micro library for easy to use code timing with times logged using the standard library.
 
 Requires Python3.6+.
 
@@ -11,7 +11,10 @@ Requires Python3.6+.
 
 ## Usage Example
 
-### Decorator
+The library allows you to measure the run time of your code in two way. Using decorators and
+ using context manager to measure run time of any code block.
+
+### Decorator Timer
 
 ```python
 import logging
@@ -37,6 +40,10 @@ if __name__ == '__main__':
 Hello from func.
 INFO:timer:Finished function func in 1.0018878109985963s.
 ```
+
+PyTimers leverage python library [wrapt](https://wrapt.readthedocs.io/en/latest/) to make sure
+ decorators can be applied to all function, methods, static methods and also class methods while
+  not changing the callable signature in any way.
 
 ### Block Timer
 
