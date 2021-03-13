@@ -4,12 +4,12 @@
 # https://github.com/cclauss/autoblack
 
 name: autoblack
-on: [pull_request]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -23,8 +23,6 @@ jobs:
         run: |
           black .
           git config --global user.name 'autoblack'
-          git config --global user.email 'cclauss@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git checkout $GITHUB_HEAD_REF
+          git config --global user.email 'autoblack@users.noreply.github.com'
           git commit -am "fixup: Format Python code with Black"
           git push
