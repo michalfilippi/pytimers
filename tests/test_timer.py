@@ -1,6 +1,8 @@
 import inspect
 import logging
 
+import pytest
+
 from pytimers import timer, Timer
 
 
@@ -261,3 +263,12 @@ def test_function_decorator_creates_correct_message_with_placeholders(caplog):
 
     assert len(caplog.records) == 1
     assert caplog.records[0].message == "Message function func."
+
+
+def test_class_decorator_raises_exception():
+    @timer
+    class Foo:
+        pass
+
+    with pytest.raises(TypeError):
+        Foo()
