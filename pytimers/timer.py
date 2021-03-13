@@ -16,9 +16,10 @@ class Timer:
     ):
         """Initializes Timer object with custom configuration parameters.
 
-        :param log_template: String template to be used to format log message. The template is used in
-            String.Template object. There are two placeholders allowed ${name} and ${duration}. These will be replaced
-            during actual logging for timed instance name and time duration respectively.
+        :param log_template: String template to be used to format log message. The
+            template is used in String.Template object. There are two placeholders
+            allowed ${name} and ${duration}. These will be replaced during actual
+            logging for timed instance name and time duration respectively.
         :param log_level: Logging level as understood by standard logging library.
         """
 
@@ -32,12 +33,13 @@ class Timer:
         self.log_level = log_level
 
     def named(self, name: str) -> "Timer":
-        """Sets name for the current timer. This method should be used to name code block for timing. The name of
-        the block is later used for logging.
+        """Sets name for the current timer. This method should be used to name code
+        block for timing. The name of the block is later used for logging.
 
         :param name: Timer name.
         :return: Returns self.
         """
+
         self._name = name
         return self
 
