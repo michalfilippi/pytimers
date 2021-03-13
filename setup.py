@@ -8,7 +8,7 @@ setuptools.setup(
     version="2.0",
     author="Michal Filippi",
     author_email="michal.filippi@gmail.com",
-    description="Python library for simple and easy to use code timing.",
+    description="Timing of functions, methods or block of codes made easy.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/michalfilippi/pytimers",
