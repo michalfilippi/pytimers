@@ -139,4 +139,4 @@ WARNING:timer:Processing function func took 1.0028993980085943s.
 
 ![Lint and Tests](https://github.com/michalfilippi/pytimers/workflows/Lint%20and%20Tests/badge.svg)
 
-![Black Formatter](https://github.com/michalfilippi/pytimers/workflows/black/badge.svg)
+![Black Formatter](https://github.com/michalfilippi/pytimers/workflows/autoblack/badge.svg)
