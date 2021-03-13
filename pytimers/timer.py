@@ -66,11 +66,11 @@ class Timer:
 
     def log_message(self, duration: float, name: str):
         self.logger.log(
-                self.log_level,
-                self.message_template.substitute(
-                    duration=duration,
-                    name=name,
-                ),
+            self.log_level,
+            self.message_template.substitute(
+                duration=duration,
+                name=name,
+            ),
         )
 
 
