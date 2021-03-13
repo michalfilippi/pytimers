@@ -66,16 +66,12 @@ class Timer:
 
     def log_message(self, duration: float, name: str):
         self.logger.log(
-            self.log_level,
-            self.message_template.substitute(
-                duration=duration,
-                name=name,
-            ),
+                self.log_level,
+                self.message_template.substitute(
+                    duration=duration,
+                    name=name,
+                ),
         )
 
-
-# @wrapt.decorator
-# def timer(wrapped, instance, args, kwargs):
-#     return wrapped(*args, **kwargs)
 
 timer = Timer()
