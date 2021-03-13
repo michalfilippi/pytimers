@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from timer import Timer, timer
+from timer import timer
 
 
 @pytest.fixture
