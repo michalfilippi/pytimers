@@ -147,10 +147,21 @@ WARNING:timer:Processing function func took 1.0028993980085943s.
 
 ## PyPi
 
-[![PyPI version fury.io](https://badge.fury.io/py/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+[
+    ![PyPI](https://img.shields.io/pypi/v/pytimers)
+](https://pypi.python.org/pypi/pytimers/)
 
-[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+[
+    ![PyPI - License](https://img.shields.io/pypi/l/pytimers)
+](https://pypi.python.org/pypi/pytimers/)
 
-[![PyPI format](https://img.shields.io/pypi/format/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+[
+    ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pytimers)
+](https://pypi.python.org/pypi/pytimers/)
 
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/pytimers/)
+[
+    ![PyPI - Implementation](https://img.shields.io/pypi/implementation/pytimers)
+](https://pypi.python.org/pypi/pytimers/)
+
+
+
