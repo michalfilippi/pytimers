@@ -8,7 +8,7 @@ setuptools.setup(
     version="2.1",
     author="Michal Filippi",
     author_email="michal.filippi@gmail.com",
-    description="Timing of functions, methods or block of codes made easy.",
+    description="Timing of functions, methods or blocks of code made easy.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/michalfilippi/pytimers",
