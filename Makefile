@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	cd pytimers; python -m pytest ../tests/
+	python -m pytest ./tests/

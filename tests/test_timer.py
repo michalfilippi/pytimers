@@ -1,27 +1,10 @@
 import inspect
+import logging
 
-import pytest
-
-from timer import timer
-
-
-@pytest.fixture
-def complex_function():
-    def f(a, b: int = 0, *args: int, **kwargs: int):
-        """Docstring for the fucntion f."""
-        return a + b + sum(args) + sum(kwargs.values())
-
-    return f
+from pytimers import timer, Timer
 
 
-@pytest.fixture
-def decorated_function(complex_function):
-    return timer(complex_function)
-
-
-def test_timer_singleton_function_identical_output(
-    complex_function, decorated_function
-):
+def test_function_decorator_preserves_output():
     @timer
     def func(a):
         return a
@@ -29,7 +12,7 @@ def test_timer_singleton_function_identical_output(
     assert func(2) == 2
 
 
-def test_timer_singleton_function_preserves_name(complex_function, decorated_function):
+def test_function_decorator_preserves_name():
     @timer
     def func(a):
         return a
@@ -37,7 +20,7 @@ def test_timer_singleton_function_preserves_name(complex_function, decorated_fun
     assert func.__name__ == "func"
 
 
-def test_timer_singleton_function_preserves_doc(complex_function, decorated_function):
+def test_function_decorator_preserves_doc():
     @timer
     def func(a):
         """Function func docstring."""
@@ -46,9 +29,7 @@ def test_timer_singleton_function_preserves_doc(complex_function, decorated_func
     assert func.__doc__ == "Function func docstring."
 
 
-def test_timer_singleton_function_preserves_inspection(
-    complex_function, decorated_function
-):
+def test_function_decorator_preserves_inspection():
     @timer
     def func(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
         return a + b + sum(args) + c + sum(kwargs.values())
@@ -69,7 +50,7 @@ def test_timer_singleton_function_preserves_inspection(
     }
 
 
-def test_timer_singleton_method_preserves_output():
+def test_method_decorator_preserves_output():
     class Foo:
         @timer
         def bar(self, a):
@@ -78,7 +59,7 @@ def test_timer_singleton_method_preserves_output():
     assert Foo().bar(2) == 2
 
 
-def test_timer_singleton_method_preserves_name():
+def test_method_decorator_preserves_name():
     class Foo:
         @timer
         def bar(self, a):
@@ -87,7 +68,7 @@ def test_timer_singleton_method_preserves_name():
     assert Foo().bar.__name__ == "bar"
 
 
-def test_timer_singleton_method_preserves_doc():
+def test_method_decorator_preserves_doc():
     class Foo:
         @timer
         def bar(self, a):
@@ -97,7 +78,7 @@ def test_timer_singleton_method_preserves_doc():
     assert Foo().bar.__doc__ == "Method bar docstring."
 
 
-def test_timer_singleton_method_preserves_inspection():
+def test_method_decorator_preserves_inspection():
     class Foo:
         @timer
         def bar(self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
@@ -119,7 +100,7 @@ def test_timer_singleton_method_preserves_inspection():
     }
 
 
-def test_timer_singleton_static_method_preserves_output():
+def test_static_method_decorator_preserves_output():
     class Foo:
         @timer
         @staticmethod
@@ -129,7 +110,7 @@ def test_timer_singleton_static_method_preserves_output():
     assert Foo.bar(2) == 2
 
 
-def test_timer_singleton_static_method_preserves_name():
+def test_static_method_decorator_preserves_name():
     class Foo:
         @timer
         @staticmethod
@@ -139,7 +120,7 @@ def test_timer_singleton_static_method_preserves_name():
     assert Foo.bar.__name__ == "bar"
 
 
-def test_timer_singleton_static_method_preserves_doc():
+def test_static_method_decorator_preserves_doc():
     class Foo:
         @timer
         @staticmethod
@@ -150,7 +131,7 @@ def test_timer_singleton_static_method_preserves_doc():
     assert Foo.bar.__doc__ == "Method bar docstring."
 
 
-def test_timer_singleton_static_method_preserves_inspection():
+def test_static_method_decorator_preserves_inspection():
     class Foo:
         @timer
         @staticmethod
@@ -171,3 +152,112 @@ def test_timer_singleton_static_method_preserves_inspection():
         "c": int,
         "kwargs": int,
     }
+
+
+def test_class_method_decorator_preserves_output():
+    class Foo:
+        @timer
+        @classmethod
+        def bar(cls, a):
+            return a
+
+    assert Foo.bar(2) == 2
+
+
+def test_class_method_decorator_preserves_name():
+    class Foo:
+        @timer
+        @classmethod
+        def bar(cls, a):
+            return a
+
+    assert Foo.bar.__name__ == "bar"
+
+
+def test_class_method_decorator_preserves_doc():
+    class Foo:
+        @timer
+        @classmethod
+        def bar(cls, a):
+            """Method bar docstring."""
+            return a
+
+    assert Foo.bar.__doc__ == "Method bar docstring."
+
+
+def test_class_method_decorator_preserves_inspection():
+    class Foo:
+        @timer
+        @classmethod
+        def bar(cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
+            return a + b + sum(args) + c + sum(kwargs.values())
+
+    inspection = inspect.getfullargspec(Foo().bar)
+
+    assert inspection.args == ["cls", "a", "b"]
+    assert inspection.varargs == "args"
+    assert inspection.varkw == "kwargs"
+    assert inspection.defaults == (1,)
+    assert inspection.kwonlyargs == ["c"]
+    assert inspection.kwonlydefaults == {"c": 1}
+    assert inspection.annotations == {
+        "b": int,
+        "args": int,
+        "c": int,
+        "kwargs": int,
+    }
+
+
+def test_function_decorator_creates_info_log(caplog):
+    @timer
+    def func():
+        pass
+
+    with caplog.at_level(logging.INFO):
+        func()
+
+    assert len(caplog.records) == 1
+    assert caplog.records[0].levelno == logging.INFO
+
+
+def test_function_decorator_creates_correct_log_level(caplog):
+    custom_timer = Timer(log_level=logging.WARNING)
+
+    @custom_timer
+    def func():
+        pass
+
+    with caplog.at_level(logging.INFO):
+        func()
+
+    assert len(caplog.records) == 1
+    assert caplog.records[0].levelno == logging.WARNING
+
+
+def test_function_decorator_creates_correct_message(caplog):
+    message = "No placeholder."
+    custom_timer = Timer(log_template=message)
+
+    @custom_timer
+    def func():
+        pass
+
+    with caplog.at_level(logging.INFO):
+        func()
+
+    assert len(caplog.records) == 1
+    assert caplog.records[0].message == message
+
+
+def test_function_decorator_creates_correct_message_with_placeholders(caplog):
+    custom_timer = Timer(log_template="Message ${name}.")
+
+    @custom_timer
+    def func():
+        pass
+
+    with caplog.at_level(logging.INFO):
+        func()
+
+    assert len(caplog.records) == 1
+    assert caplog.records[0].message == "Message function func."

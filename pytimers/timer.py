@@ -1,18 +1,18 @@
 from timeit import default_timer
 import inspect
-from typing import Optional
+from typing import Optional, List
 from string import Template
 import logging
 
 
-import wrapt
+import wrapt  # type: ignore
 
 
 class Timer:
     def __init__(
         self,
         log_template: Optional[str] = None,
-        log_level: Optional[int] = logging.INFO,
+        log_level: int = logging.INFO,
     ):
         """Initializes Timer object with custom configuration parameters.
 
@@ -23,9 +23,9 @@ class Timer:
         :param log_level: Logging level as understood by standard logging library.
         """
 
-        self._start_times = []
-        self._name = None
-        self._names = []
+        self._start_times: List[float] = []
+        self._name: Optional[str] = None
+        self._names: List[str] = []
         self.message_template = Template(
             log_template if log_template else "Finished ${name} in ${duration}s."
         )
@@ -88,6 +88,9 @@ class Timer:
                 name=name,
             ),
         )
+
+    def __repr__(self) -> str:
+        return f"Timer({self.message_template.template}, {self.log_level})"
 
 
 timer = Timer()

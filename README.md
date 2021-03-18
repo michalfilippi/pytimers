@@ -164,6 +164,8 @@ WARNING:timer:Processing function func took 1.0028993980085943s.
 
 ![black](https://github.com/michalfilippi/pytimers/workflows/black/badge.svg)
 
+![mypy](https://github.com/michalfilippi/pytimers/workflows/mypy/badge.svg)
+
 ## PyPi
 
 [
