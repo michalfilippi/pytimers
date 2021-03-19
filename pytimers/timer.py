@@ -18,8 +18,9 @@ class Timer:
 
         :param log_template: String template to be used to format log message. The
             template is used in String.Template object. There are two placeholders
-            allowed ${name} and ${duration}. These will be replaced during actual
-            logging for timed instance name and time duration respectively.
+            allowed ${timed_type}, ${name} and ${duration}. These will be replaced
+            during actual logging for timed instance name and time duration
+            respectively.
         :param log_level: Logging level as understood by standard logging library.
         """
 
@@ -27,7 +28,10 @@ class Timer:
         self._name: Optional[str] = None
         self._names: List[str] = []
         self.message_template = Template(
-            log_template if log_template else "Finished ${name} in ${duration}s."
+            log_template
+            if log_template
+            else "Finished ${timed_type} ${name} in ${duration}s."
+            # ToDo handle missing name in unnamed code block
         )
         self.logger = logging.getLogger(__name__)
         self.log_level = log_level
@@ -55,36 +59,44 @@ class Timer:
         start_time = self._start_times.pop()
         label = self._names.pop()
         if label is None:
-            label = "code block"
-        self._log_message(end_time - start_time, label)
+            label = ""
+        self._log_message(end_time - start_time, "code block", label)
 
     @wrapt.decorator
     def __call__(self, wrapped, instance, args, kwargs):
+        parent = ""
         if instance is None:
             if inspect.isclass(wrapped):
                 # Decorator was applied to a class.
-                callable_type = "class "
+                callable_type = "class"
             else:
                 # Decorator was applied to a function or static method.
-                callable_type = "function "
+                callable_type = "function"
         else:
             if inspect.isclass(instance):
                 # Decorator was applied to a class method.
-                callable_type = f"class method {type(instance).__name__}."
+                callable_type = "class method"
+                parent = f"{type(instance).__name__}."
             else:
                 # Decorator was applied to an instance method.
-                callable_type = f"method {type(instance).__name__}."
+                callable_type = "method"
+                parent = f"{type(instance).__name__}."
         start_time = default_timer()
         output = wrapped(*args, **kwargs)
         end_time = default_timer()
-        self._log_message(end_time - start_time, f"{callable_type}{wrapped.__name__}")
+        self._log_message(
+            end_time - start_time,
+            callable_type,
+            f"{parent}{wrapped.__name__}",
+        )
         return output
 
-    def _log_message(self, duration: float, name: str):
+    def _log_message(self, duration: float, timed_type: str, name: str):
         self.logger.log(
             self.log_level,
             self.message_template.substitute(
                 duration=duration,
+                timed_type=timed_type,
                 name=name,
             ),
         )
