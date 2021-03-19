@@ -102,8 +102,8 @@ def test_method_decorator_preserves_inspection():
 
 def test_static_method_decorator_preserves_output():
     class Foo:
-        @timer
         @staticmethod
+        @timer
         def bar(a):
             return a
 
@@ -112,8 +112,8 @@ def test_static_method_decorator_preserves_output():
 
 def test_static_method_decorator_preserves_name():
     class Foo:
-        @timer
         @staticmethod
+        @timer
         def bar(a):
             return a
 
@@ -122,8 +122,8 @@ def test_static_method_decorator_preserves_name():
 
 def test_static_method_decorator_preserves_doc():
     class Foo:
-        @timer
         @staticmethod
+        @timer
         def bar(a):
             """Method bar docstring."""
             return a
@@ -133,8 +133,8 @@ def test_static_method_decorator_preserves_doc():
 
 def test_static_method_decorator_preserves_inspection():
     class Foo:
-        @timer
         @staticmethod
+        @timer
         def bar(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
             return a + b + sum(args) + c + sum(kwargs.values())
 
@@ -156,8 +156,8 @@ def test_static_method_decorator_preserves_inspection():
 
 def test_class_method_decorator_preserves_output():
     class Foo:
-        @timer
         @classmethod
+        @timer
         def bar(cls, a):
             return a
 
@@ -166,8 +166,8 @@ def test_class_method_decorator_preserves_output():
 
 def test_class_method_decorator_preserves_name():
     class Foo:
-        @timer
         @classmethod
+        @timer
         def bar(cls, a):
             return a
 
@@ -176,8 +176,8 @@ def test_class_method_decorator_preserves_name():
 
 def test_class_method_decorator_preserves_doc():
     class Foo:
-        @timer
         @classmethod
+        @timer
         def bar(cls, a):
             """Method bar docstring."""
             return a
@@ -187,8 +187,8 @@ def test_class_method_decorator_preserves_doc():
 
 def test_class_method_decorator_preserves_inspection():
     class Foo:
-        @timer
         @classmethod
+        @timer
         def bar(cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
             return a + b + sum(args) + c + sum(kwargs.values())
 
@@ -260,4 +260,4 @@ def test_function_decorator_creates_correct_message_with_placeholders(caplog):
         func()
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].message == "Message function func."
+    assert caplog.records[0].message == "Message func."

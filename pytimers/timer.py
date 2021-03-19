@@ -5,7 +5,7 @@ from string import Template
 import logging
 
 
-import wrapt  # type: ignore
+from decorator import decorate  # type: ignore
 
 
 class Timer:
@@ -30,7 +30,7 @@ class Timer:
         self.message_template = Template(
             log_template
             if log_template
-            else "Finished ${timed_type} ${name} in ${duration}s."
+            else "Finished ${name} in ${duration}s."
             # ToDo handle missing name in unnamed code block
         )
         self.logger = logging.getLogger(__name__)
@@ -59,44 +59,42 @@ class Timer:
         start_time = self._start_times.pop()
         label = self._names.pop()
         if label is None:
-            label = ""
-        self._log_message(end_time - start_time, "code block", label)
+            label = "code block"
+        self._log_message(end_time - start_time, label)
 
-    @wrapt.decorator
-    def __call__(self, wrapped, instance, args, kwargs):
-        parent = ""
-        if instance is None:
-            if inspect.isclass(wrapped):
-                # Decorator was applied to a class.
-                callable_type = "class"
-            else:
-                # Decorator was applied to a function or static method.
-                callable_type = "function"
-        else:
-            if inspect.isclass(instance):
-                # Decorator was applied to a class method.
-                callable_type = "class method"
-                parent = f"{type(instance).__name__}."
-            else:
-                # Decorator was applied to an instance method.
-                callable_type = "method"
-                parent = f"{type(instance).__name__}."
+    def _wrapper(self, func, *args, **kwargs):
         start_time = default_timer()
-        output = wrapped(*args, **kwargs)
+        output = func(*args, **kwargs)
         end_time = default_timer()
         self._log_message(
             end_time - start_time,
-            callable_type,
-            f"{parent}{wrapped.__name__}",
+            func.__name__,
         )
         return output
 
-    def _log_message(self, duration: float, timed_type: str, name: str):
+    async def _async_wrapper(self, func, *args, **kwargs):
+        start_time = default_timer()
+        output = await func(*args, **kwargs)
+        end_time = default_timer()
+        self._log_message(
+            end_time - start_time,
+            func.__name__,
+        )
+        return output
+
+    def __call__(self, func):
+        if inspect.iscoroutinefunction(func):
+            self.logger.info(f"ASYNC type: {type(func)}")
+            return decorate(func, self._async_wrapper)
+        else:
+            self.logger.info(f"SYNC type: {type(func)}")
+            return decorate(func, self._wrapper)
+
+    def _log_message(self, duration: float, name: str):
         self.logger.log(
             self.log_level,
             self.message_template.substitute(
                 duration=duration,
-                timed_type=timed_type,
                 name=name,
             ),
         )

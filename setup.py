@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/michalfilippi/pytimers",
     packages=setuptools.find_packages(),
     install_requires=[
-        "wrapt",
+        "decorator",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
