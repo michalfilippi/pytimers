@@ -134,10 +134,7 @@ async def test_decorator_preserves_inspection(decorated_callable, extra_params):
         ClassWithClassMethod().callable_name,
     ],
 )
-async def test_decorator_logs_after_function_ends(
-    decorated_callable,
-    caplog
-):
+async def test_decorator_logs_after_function_ends(decorated_callable, caplog):
     with caplog.at_level(logging.INFO):
         await decorated_callable(1)
 
