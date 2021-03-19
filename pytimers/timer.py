@@ -58,25 +58,25 @@ class Timer:
             label = "code block"
         self._log_message(end_time - start_time, label)
 
-    def _wrapper(self, func, *args, **kwargs):
+    def _wrapper(self, wrapped, *args, **kwargs):
         start_time = default_timer()
-        output = func(*args, **kwargs)
+        output = wrapped(*args, **kwargs)
         end_time = default_timer()
-        self._log_message(end_time - start_time, func.__qualname__)
+        self._log_message(end_time - start_time, wrapped.__qualname__)
         return output
 
-    async def _async_wrapper(self, func, *args, **kwargs):
+    async def _async_wrapper(self, wrapped, *args, **kwargs):
         start_time = default_timer()
-        output = await func(*args, **kwargs)
+        output = await wrapped(*args, **kwargs)
         end_time = default_timer()
-        self._log_message(end_time - start_time, func.__qualname__)
+        self._log_message(end_time - start_time, wrapped.__qualname__)
         return output
 
-    def __call__(self, func):
-        if inspect.iscoroutinefunction(func):
-            return decorate(func, self._async_wrapper)
+    def __call__(self, wrapped):
+        if inspect.iscoroutinefunction(wrapped):
+            return decorate(wrapped, self._async_wrapper)
         else:
-            return decorate(func, self._wrapper)
+            return decorate(wrapped, self._wrapper)
 
     def _log_message(self, duration: float, name: str):
         self.logger.log(
