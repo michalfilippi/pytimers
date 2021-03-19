@@ -18,9 +18,8 @@ class Timer:
 
         :param log_template: String template to be used to format log message. The
             template is used in String.Template object. There are two placeholders
-            allowed ${timed_type}, ${name} and ${duration}. These will be replaced
-            during actual logging for timed instance name and time duration
-            respectively.
+            allowed ${name} and ${duration}. These will be replaced during actual
+            logging for timed instance name and time duration respectively.
         :param log_level: Logging level as understood by standard logging library.
         """
 
@@ -28,10 +27,7 @@ class Timer:
         self._name: Optional[str] = None
         self._names: List[str] = []
         self.message_template = Template(
-            log_template
-            if log_template
-            else "Finished ${name} in ${duration}s."
-            # ToDo handle missing name in unnamed code block
+            log_template if log_template else "Finished ${name} in ${duration}s."
         )
         self.logger = logging.getLogger(__name__)
         self.log_level = log_level
@@ -66,28 +62,20 @@ class Timer:
         start_time = default_timer()
         output = func(*args, **kwargs)
         end_time = default_timer()
-        self._log_message(
-            end_time - start_time,
-            func.__name__,
-        )
+        self._log_message(end_time - start_time, func.__qualname__)
         return output
 
     async def _async_wrapper(self, func, *args, **kwargs):
         start_time = default_timer()
         output = await func(*args, **kwargs)
         end_time = default_timer()
-        self._log_message(
-            end_time - start_time,
-            func.__name__,
-        )
+        self._log_message(end_time - start_time, func.__qualname__)
         return output
 
     def __call__(self, func):
         if inspect.iscoroutinefunction(func):
-            self.logger.info(f"ASYNC type: {type(func)}")
             return decorate(func, self._async_wrapper)
         else:
-            self.logger.info(f"SYNC type: {type(func)}")
             return decorate(func, self._wrapper)
 
     def _log_message(self, duration: float, name: str):
