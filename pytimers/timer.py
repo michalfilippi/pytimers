@@ -106,8 +106,5 @@ class Timer:
                 code_block=code_block,
             )
 
-    def __repr__(self) -> str:
-        return f"Timer({self.message_template.template}, {self.log_level})"
-
 
 timer = Timer()
