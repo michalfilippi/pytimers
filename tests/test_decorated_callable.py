@@ -1,97 +1,94 @@
 import inspect
 import logging
+from typing import Callable, List
 
 import pytest
 
 from pytimers import timer
 
 
-@timer
-def callable_name(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
-    """Callable docstring."""
-    return a + b + sum(args) + c + sum(kwargs.values())
-
-
-class ClassWithMethod:
-    @timer
-    def callable_name(self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
-        """Callable docstring."""
-        return a + b + sum(args) + c + sum(kwargs.values())
-
-
-class ClassWithStaticMethod:
-    @staticmethod
+def create_callables(extra_param: bool = False):
     @timer
     def callable_name(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
         """Callable docstring."""
         return a + b + sum(args) + c + sum(kwargs.values())
 
+    class ClassWithMethod:
+        @timer
+        def callable_name(self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
+            """Callable docstring."""
+            return a + b + sum(args) + c + sum(kwargs.values())
 
-class ClassWithClassMethod:
-    @classmethod
-    @timer
-    def callable_name(cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
-        """Callable docstring."""
-        return a + b + sum(args) + c + sum(kwargs.values())
+    class ClassWithStaticMethod:
+        @staticmethod
+        @timer
+        def callable_name(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
+            """Callable docstring."""
+            return a + b + sum(args) + c + sum(kwargs.values())
 
+    class ClassWithClassMethod:
+        @classmethod
+        @timer
+        def callable_name(cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
+            """Callable docstring."""
+            return a + b + sum(args) + c + sum(kwargs.values())
 
-@pytest.mark.parametrize(
-    "decorated_callable",
-    [
+    callables = [
         callable_name,
         ClassWithMethod().callable_name,
         ClassWithStaticMethod.callable_name,
         ClassWithStaticMethod().callable_name,
         ClassWithClassMethod.callable_name,
         ClassWithClassMethod().callable_name,
-    ],
+    ]
+
+    if extra_param:
+        return list(
+            zip(
+                callables,
+                [
+                    [],
+                    ["self"],
+                    [],
+                    [],
+                    ["cls"],
+                    ["cls"],
+                ],
+            )
+        )
+    else:
+        return callables
+
+
+@pytest.mark.parametrize(
+    "decorated_callable",
+    create_callables(),
 )
-def test_decorator_preserves_output(decorated_callable):
+def test_decorator_preserves_output(decorated_callable: Callable):
     assert decorated_callable(2) == 4
 
 
 @pytest.mark.parametrize(
     "decorated_callable",
-    [
-        callable_name,
-        ClassWithMethod().callable_name,
-        ClassWithStaticMethod.callable_name,
-        ClassWithStaticMethod().callable_name,
-        ClassWithClassMethod.callable_name,
-        ClassWithClassMethod().callable_name,
-    ],
+    create_callables(),
 )
-def test_decorator_preserves_name(decorated_callable):
+def test_decorator_preserves_name(decorated_callable: Callable):
     assert decorated_callable.__name__ == "callable_name"
 
 
 @pytest.mark.parametrize(
     "decorated_callable",
-    [
-        callable_name,
-        ClassWithMethod().callable_name,
-        ClassWithStaticMethod.callable_name,
-        ClassWithStaticMethod().callable_name,
-        ClassWithClassMethod.callable_name,
-        ClassWithClassMethod().callable_name,
-    ],
+    create_callables(),
 )
-def test_decorator_preserves_doc(decorated_callable):
+def test_decorator_preserves_doc(decorated_callable: Callable):
     assert decorated_callable.__doc__ == "Callable docstring."
 
 
 @pytest.mark.parametrize(
     "decorated_callable,extra_params",
-    [
-        (callable_name, []),
-        (ClassWithMethod().callable_name, ["self"]),
-        (ClassWithStaticMethod.callable_name, []),
-        (ClassWithStaticMethod().callable_name, []),
-        (ClassWithClassMethod.callable_name, ["cls"]),
-        (ClassWithClassMethod().callable_name, ["cls"]),
-    ],
+    create_callables(True),
 )
-def test_decorator_preserves_inspection(decorated_callable, extra_params):
+def test_decorator_preserves_inspection(decorated_callable, extra_params: List[str]):
     inspection = inspect.getfullargspec(decorated_callable)
 
     assert inspection.args == extra_params + ["a", "b"]
@@ -110,16 +107,9 @@ def test_decorator_preserves_inspection(decorated_callable, extra_params):
 
 @pytest.mark.parametrize(
     "decorated_callable",
-    [
-        callable_name,
-        ClassWithMethod().callable_name,
-        ClassWithStaticMethod.callable_name,
-        ClassWithStaticMethod().callable_name,
-        ClassWithClassMethod.callable_name,
-        ClassWithClassMethod().callable_name,
-    ],
+    create_callables(),
 )
-def test_decorator_creates_info_log(decorated_callable, caplog):
+def test_decorator_creates_info_log(decorated_callable: Callable, caplog):
     with caplog.at_level(logging.INFO):
         decorated_callable(1)
 
