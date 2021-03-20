@@ -53,10 +53,10 @@ class Timer:
             )
 
     def named(self, name: str) -> "Timer":
-        """Sets name for the current timer. This method should be used to name code
-        block for timing. The name of the block is later used for logging.
+        """Sets name for the next timed code block. If there's no name set for code
+        blocks the log message will use general "code block" as a name for timed block.
 
-        :param name: Timer name.
+        :param name: Code block name.
         :return: Returns self.
         """
 
