@@ -38,7 +38,7 @@ class Timer:
         self.triggers = triggers if triggers else []
 
         self.triggers.append(
-            lambda name, duration: self.logger.log(
+            lambda name, duration, code_block: self.logger.log(
                 self.log_level,
                 self.message_template.substitute(
                     duration=duration,
