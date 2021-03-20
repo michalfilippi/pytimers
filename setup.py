@@ -5,16 +5,16 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pytimers",
-    version="2.1",
+    version="2.2",
     author="Michal Filippi",
     author_email="michal.filippi@gmail.com",
-    description="Timing of functions, methods or block of codes made easy.",
+    description="Timing of functions, methods or blocks of code made easy.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/michalfilippi/pytimers",
     packages=setuptools.find_packages(),
     install_requires=[
-        "wrapt",
+        "decorator",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -1,26 +1,33 @@
 from timeit import default_timer
 import inspect
-from typing import Optional, List
+from typing import Optional, List, Callable
 from string import Template
 import logging
 
 
-import wrapt  # type: ignore
+from decorator import decorate  # type: ignore
 
 
 class Timer:
     def __init__(
         self,
+        log: bool = True,
         log_template: Optional[str] = None,
         log_level: int = logging.INFO,
+        triggers: List[Callable] = None,
     ):
         """Initializes Timer object with custom configuration parameters.
 
+        :param log: Boolean switch that turn logging on and off. To disable logging
+            set it to False.
         :param log_template: String template to be used to format log message. The
             template is used in String.Template object. There are two placeholders
             allowed ${name} and ${duration}. These will be replaced during actual
             logging for timed instance name and time duration respectively.
         :param log_level: Logging level as understood by standard logging library.
+        :param triggers: A list of callables to be called after the timing finishes.
+            All triggers should accept keywords arguments duration: float, name: str,
+            code_block: bool.
         """
 
         self._start_times: List[float] = []
@@ -31,12 +38,25 @@ class Timer:
         )
         self.logger = logging.getLogger(__name__)
         self.log_level = log_level
+        self.triggers = triggers if triggers else []
+        self.log = log
+
+        if log:
+            self.triggers.append(
+                lambda name, duration, code_block: self.logger.log(
+                    self.log_level,
+                    self.message_template.substitute(
+                        duration=duration,
+                        name=name,
+                    ),
+                )
+            )
 
     def named(self, name: str) -> "Timer":
-        """Sets name for the current timer. This method should be used to name code
-        block for timing. The name of the block is later used for logging.
+        """Sets name for the next timed code block. If there's no name set for code
+        blocks the log message will use general "code block" as a name for timed block.
 
-        :param name: Timer name.
+        :param name: Code block name.
         :return: Returns self.
         """
 
@@ -56,41 +76,35 @@ class Timer:
         label = self._names.pop()
         if label is None:
             label = "code block"
-        self._log_message(end_time - start_time, label)
+        self._finish_timing(end_time - start_time, label, True)
 
-    @wrapt.decorator
-    def __call__(self, wrapped, instance, args, kwargs):
-        if instance is None:
-            if inspect.isclass(wrapped):
-                # Decorator was applied to a class.
-                callable_type = "class "
-            else:
-                # Decorator was applied to a function or static method.
-                callable_type = "function "
-        else:
-            if inspect.isclass(instance):
-                # Decorator was applied to a class method.
-                callable_type = f"class method {type(instance).__name__}."
-            else:
-                # Decorator was applied to an instance method.
-                callable_type = f"method {type(instance).__name__}."
+    def _wrapper(self, wrapped, *args, **kwargs):
         start_time = default_timer()
         output = wrapped(*args, **kwargs)
         end_time = default_timer()
-        self._log_message(end_time - start_time, f"{callable_type}{wrapped.__name__}")
+        self._finish_timing(end_time - start_time, wrapped.__qualname__, False)
         return output
 
-    def _log_message(self, duration: float, name: str):
-        self.logger.log(
-            self.log_level,
-            self.message_template.substitute(
+    async def _async_wrapper(self, wrapped, *args, **kwargs):
+        start_time = default_timer()
+        output = await wrapped(*args, **kwargs)
+        end_time = default_timer()
+        self._finish_timing(end_time - start_time, wrapped.__qualname__, False)
+        return output
+
+    def __call__(self, wrapped):
+        if inspect.iscoroutinefunction(wrapped):
+            return decorate(wrapped, self._async_wrapper)
+        else:
+            return decorate(wrapped, self._wrapper)
+
+    def _finish_timing(self, duration: float, name: str, code_block: bool):
+        for trigger in self.triggers:
+            trigger(
                 duration=duration,
                 name=name,
-            ),
-        )
-
-    def __repr__(self) -> str:
-        return f"Timer({self.message_template.template}, {self.log_level})"
+                code_block=code_block,
+            )
 
 
 timer = Timer()
