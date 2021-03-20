@@ -11,20 +11,23 @@ from decorator import decorate  # type: ignore
 class Timer:
     def __init__(
         self,
+        log: bool = True,
         log_template: Optional[str] = None,
         log_level: int = logging.INFO,
         triggers: List[Callable] = None,
     ):
         """Initializes Timer object with custom configuration parameters.
 
+        :param log: Boolean switch that turn logging on and off. To disable logging
+            set it to False.
         :param log_template: String template to be used to format log message. The
             template is used in String.Template object. There are two placeholders
             allowed ${name} and ${duration}. These will be replaced during actual
             logging for timed instance name and time duration respectively.
         :param log_level: Logging level as understood by standard logging library.
         :param triggers: A list of callables to be called after the timing finishes.
-            The timer passes keywords arguments duration: float, name: str, code_block:
-            bool.
+            All triggers should accept keywords arguments duration: float, name: str,
+            code_block: bool.
         """
 
         self._start_times: List[float] = []
@@ -36,16 +39,18 @@ class Timer:
         self.logger = logging.getLogger(__name__)
         self.log_level = log_level
         self.triggers = triggers if triggers else []
+        self.log = log
 
-        self.triggers.append(
-            lambda name, duration, code_block: self.logger.log(
-                self.log_level,
-                self.message_template.substitute(
-                    duration=duration,
-                    name=name,
-                ),
+        if log:
+            self.triggers.append(
+                lambda name, duration, code_block: self.logger.log(
+                    self.log_level,
+                    self.message_template.substitute(
+                        duration=duration,
+                        name=name,
+                    ),
+                )
             )
-        )
 
     def named(self, name: str) -> "Timer":
         """Sets name for the current timer. This method should be used to name code

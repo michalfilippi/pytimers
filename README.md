@@ -2,7 +2,7 @@
 Python micro library for easy to use code timing with the elapsed times logged using the standard
  logging library.
 
-Requires Python 3.6+.
+Requires Python 3.6 and higher.
 
 ## How to Install
 
@@ -12,10 +12,15 @@ Requires Python 3.6+.
 
 ## Usage Example
 
-The library allows you to measure the run time of your code in two way. Using decorators and
- using context manager to measure run time of any code block.
+The library allows you to measure the run time of your code in two way. Using decorators and using 
+ context manager to measure run time of any code block.
 
-### Decorator Timer
+### Timer Decorator
+
+The timer decorator can be applied to both synchronous and asynchronous functions and methods.
+ Decorating classes is not supported and will raise `TypeError`. PyTimers leverage python library 
+ [decarator](https://github.com/micheles/decorator) to make sure decorating will preserve the 
+ function/method signature, name and docstring.
 
 ```python
 import logging
@@ -39,17 +44,46 @@ if __name__ == '__main__':
 
 ```
 Hello from func.
-INFO:timer:Finished function func in 1.0018878109985963s.
+INFO:pytimers.timer:Finished func in 1.0018878109985963s.
 ```
 
-PyTimers leverage python library [wrapt](https://wrapt.readthedocs.io/en/latest/) to make sure
- decorators can be applied to all function, methods, static methods and also class methods while
-  not changing the callable signature in any way.
+#### Class Methods and Static methods
+
+To combine timer decorator with decorators `@staticmethoid` and `@classmethod` you have to first
+ apply timer decorator. Applying the decorators the other way around will result in `TypeError`
+ exception. 
+ 
+```python
+import logging
+from time import sleep
+
+from pytimers import timer
+
+
+logging.basicConfig(level=logging.INFO)
+
+class Foo:
+    @staticmethod
+    @timer
+    def method(*args: int):
+        print("Hello from static method.")
+        sleep(1)
+        return sum(args)
+
+
+if __name__ == '__main__':
+    foo = Foo()    
+    foo.method(1, 2, 3)
+```
+
+```
+Hello from static method.
+INFO:pytimers.timer:Finished Foo.method in 1.0001546249259263s.
+```
 
 ### Block Timer
   
-To measure time of any code not enclosed in a callable object you can use timer context manager
- as follows.
+To measure time of any code not enclosed in a callable object you can use timer context manager.
   
 ```python
 import logging
@@ -68,7 +102,7 @@ if __name__ == '__main__':
 
 ```
 Hello from code block.
-INFO:timer:Finished code block in 1.0027356049977243s.
+INFO:pytimers.timer:Finished code block in 1.0027356049977243s.
 ```
 
 Block of code can also be named to increase log readability.
@@ -90,7 +124,7 @@ if __name__ == '__main__':
 
 ```
 Hello from code block.
-INFO:timer:Finished data processing pipeline in 1.0051407059945632s.
+INFO:pytimers.timer:Finished data processing pipeline in 1.0051407059945632s.
 ```
 
 Timer context manager also allows you to stack context managers freely without a worry of
@@ -109,22 +143,28 @@ if __name__ == '__main__':
     with timer.named("data collecting pipeline"):
         print("Hello from code block n.1.")
         sleep(1)
-        with timer.named("data processing pipeline"):
+        with timer:
             print("Hello from code block n.2.")
             sleep(1)
+            with timer.named("data processing pipeline"):
+                print("Hello from code block n.3.")
+                sleep(1)
 ```
 
 ```
 Hello from code block n.1.
 Hello from code block n.2.
-INFO:timer:Finished data processing pipeline in 1.0008160540019162s.
-INFO:timer:Finished data collecting pipeline in 2.0029643359885085s.
+Hello from code block n.3.
+INFO:pytimers.timer:Finished data processing pipeline in 1.0008160540019162s.
+INFO:pytimers.timer:Finished code block in 2.005773539072834s.
+INFO:pytimers.timer:Finished data collecting pipeline in 3.007467524963431s.
 ```
 
 ## Timer Custom Configuration
 
-If you need to customize the log message template or logging level you can create your own timer
- using provided `Timer` class.
+If you need to customize the timer you can create your own timer using provided `Timer` class.
+ Customization consists of disabling logging, setting the log level, setting the log message
+ template as `string.Template` compatible stings and adding custom triggers.
 
 ```python
 import logging
@@ -153,8 +193,15 @@ if __name__ == '__main__':
 
 ```
 Hello from func.
-WARNING:timer:Processing function func took 1.0028993980085943s.
+WARNING:pytimers.timer:Processing func took 1.0028993980085943s.
 ```
+
+Triggers should be functions with the following signature.
+  
+```python
+def trigger(duration: float, name: str, code_block: bool) -> None:
+    pass
+``` 
 
 ## Build Status
 
@@ -183,6 +230,3 @@ WARNING:timer:Processing function func took 1.0028993980085943s.
 [
     ![PyPI - Implementation](https://img.shields.io/pypi/implementation/pytimers)
 ](https://pypi.python.org/pypi/pytimers/)
-
-
-
