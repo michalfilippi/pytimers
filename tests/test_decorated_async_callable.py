@@ -24,7 +24,9 @@ def create_callables(extra_param: bool = False):
 
     class ClassWithMethod:
         @timer
-        async def callable_name(self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
+        async def callable_name(
+            self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+        ):
             """Callable docstring."""
             await sleep(0.01)
             logging.getLogger(__name__).info(LOG_MESSAGE)
@@ -42,7 +44,9 @@ def create_callables(extra_param: bool = False):
     class ClassWithClassMethod:
         @classmethod
         @timer
-        async def callable_name(cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
+        async def callable_name(
+            cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+        ):
             """Callable docstring."""
             await sleep(0.01)
             logging.getLogger(__name__).info(LOG_MESSAGE)
@@ -104,8 +108,8 @@ async def test_decorator_preserves_doc(decorated_callable: Callable):
     create_callables(True),
 )
 async def test_decorator_preserves_inspection(
-        decorated_callable: Callable,
-        extra_params: List[str],
+    decorated_callable: Callable,
+    extra_params: List[str],
 ):
     inspection = inspect.getfullargspec(decorated_callable)
 
