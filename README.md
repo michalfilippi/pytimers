@@ -13,8 +13,7 @@ Requires Python 3.6 and higher.
 ## Usage Example
 
 The library allows you to measure the run time of your code in two ways. Using decorators and 
-using 
- context manager to measure run time of any code block.
+ using  context manager to measure run time of any code block.
 
 ### Timer Decorator
 
