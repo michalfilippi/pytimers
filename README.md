@@ -12,14 +12,14 @@ Requires Python 3.6 and higher.
 
 ## Usage Example
 
-The library allows you to measure the run time of your code in two way. Using decorators and using 
- context manager to measure run time of any code block.
+The library allows you to measure the run time of your code in two ways. Using decorators and 
+ using  context manager to measure run time of any code block.
 
 ### Timer Decorator
 
 The timer decorator can be applied to both synchronous and asynchronous functions and methods.
  Decorating classes is not supported and will raise `TypeError`. PyTimers leverage python library 
- [decarator](https://github.com/micheles/decorator) to make sure decorating will preserve the 
+ [decorator](https://github.com/micheles/decorator) to make sure decorating will preserve the 
  function/method signature, name and docstring.
 
 ```python
@@ -38,7 +38,7 @@ def func(*args: int):
     return sum(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     func(1, 2, 3)
 ```
 
@@ -71,7 +71,7 @@ class Foo:
         return sum(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     foo = Foo()    
     foo.method(1, 2, 3)
 ```
@@ -94,7 +94,7 @@ from pytimers import timer
 
 logging.basicConfig(level=logging.INFO)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with timer:
         print("Hello from code block.")
         sleep(1)
@@ -116,7 +116,7 @@ from pytimers import timer
 
 logging.basicConfig(level=logging.INFO)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with timer.named("data processing pipeline"):
         print("Hello from code block.")
         sleep(1)
@@ -139,7 +139,7 @@ from pytimers import timer
 
 logging.basicConfig(level=logging.INFO)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with timer.named("data collecting pipeline"):
         print("Hello from code block n.1.")
         sleep(1)
@@ -187,7 +187,7 @@ def func(*args: int):
     return sum(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     func(1, 2, 3)
 ```
 
