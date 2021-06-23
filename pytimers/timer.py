@@ -40,7 +40,7 @@ class Timer:
         self.log_level = log_level
         self.triggers = triggers if triggers else []
         self.log = log
-        self.time = None
+        self.time: Optional[float] = None
 
         if log:
             self.triggers.append(
