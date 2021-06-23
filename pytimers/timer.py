@@ -40,6 +40,7 @@ class Timer:
         self.log_level = log_level
         self.triggers = triggers if triggers else []
         self.log = log
+        self.time: Optional[float] = None
 
         if log:
             self.triggers.append(
@@ -99,6 +100,7 @@ class Timer:
             return decorate(wrapped, self._wrapper)
 
     def _finish_timing(self, duration: float, name: str, code_block: bool):
+        self.time = duration
         for trigger in self.triggers:
             trigger(
                 duration=duration,

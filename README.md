@@ -105,6 +105,31 @@ Hello from code block.
 INFO:pytimers.timer:Finished code block in 1.0027356049977243s.
 ```
 
+You can use the latest time measurement from the timer in your own code by accessing the `time` 
+field.
+
+```python
+import logging
+from time import sleep
+
+from pytimers import timer
+
+
+logging.basicConfig(level=logging.INFO)
+
+if __name__ == "__main__":
+    with timer:
+        print("We want to run this under 5s.")
+        sleep(1)
+    print(f"We still had {5 - timer.time}s remaining.")
+```
+
+```
+We want to run this under 5s.
+INFO:pytimers.timer:Finished code block in 1.003774584038183s.
+We still had 3.996225415961817s remaining.
+```
+
 Block of code can also be named to increase log readability.
 
 ```python
