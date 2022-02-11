@@ -11,8 +11,7 @@ class StartedClock:
         self._duration: Optional[float] = None
 
     def stop(self) -> None:
-        """Stops the clock.
-        """
+        """Stops the clock."""
 
         self._duration = default_timer() - self.start_time
 
@@ -25,7 +24,9 @@ class StartedClock:
         """
 
         if self._duration is None:
-            raise UnfinishedTimer("Clock has to be stopped before accessing elapsed time.")
+            raise UnfinishedTimer(
+                "Clock has to be stopped before accessing elapsed time."
+            )
         else:
             return self._duration
 

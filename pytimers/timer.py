@@ -21,9 +21,9 @@ STARTED_CLOCK_VAR: ContextVar[Optional[list[StartedClock]]] = ContextVar(
 class Timer:
     def __init__(
         self,
-        triggers: Optional[Iterable[
-            BaseTrigger | Callable[[float, bool, Optional[str]], Any]
-        ]] = None,
+        triggers: Optional[
+            Iterable[BaseTrigger | Callable[[float, bool, Optional[str]], Any]]
+        ] = None,
     ):
         """Initializes Timer object with a set of triggers to be applied after the
         timer finishes.
@@ -78,10 +78,10 @@ class Timer:
             self._finish_timing(started_timer.time, started_timer.label, False)
 
     def _wrapper(
-            self,
-            wrapped: Callable[..., Any],
-            *args: Any,
-            **kwargs: Any,
+        self,
+        wrapped: Callable[..., Any],
+        *args: Any,
+        **kwargs: Any,
     ) -> Any:
         start_time = default_timer()
         output = wrapped(*args, **kwargs)
@@ -90,10 +90,10 @@ class Timer:
         return output
 
     async def _async_wrapper(
-            self,
-            wrapped: Callable[..., Awaitable[Any]],
-            *args: Any,
-            **kwargs: Any,
+        self,
+        wrapped: Callable[..., Awaitable[Any]],
+        *args: Any,
+        **kwargs: Any,
     ) -> Any:
         start_time = default_timer()
         output = await wrapped(*args, **kwargs)
