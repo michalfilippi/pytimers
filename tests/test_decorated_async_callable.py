@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 import inspect
-from typing import Callable, Awaitable
+from typing import Awaitable, Callable
 
 import pytest
 

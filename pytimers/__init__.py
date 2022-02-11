@@ -1,6 +1,6 @@
-from .timer import timer, Timer
+from .timer import Timer, timer
 
 __all__ = [
-    "timer",
     "Timer",
+    "timer",
 ]

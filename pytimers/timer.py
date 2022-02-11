@@ -1,6 +1,7 @@
 from __future__ import annotations
-from timeit import default_timer
+
 import inspect
+from timeit import default_timer
 from typing import Iterable, Optional
 
 from decorator import decorate  # type: ignore
