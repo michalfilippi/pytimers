@@ -1,3 +1,8 @@
-pytest==6.2.2
+# pytimers dependencies
 decorator==4.4.2
-pytest-asyncio==0.14.0
+
+# test dependencies
+black
+pytest
+pytest-asyncio
+pytest-cov
