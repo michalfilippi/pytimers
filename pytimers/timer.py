@@ -84,6 +84,3 @@ class Timer:
                 label=name,
                 decorator=decorator,
             )
-
-
-timer = Timer()
