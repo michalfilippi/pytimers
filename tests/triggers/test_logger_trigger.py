@@ -10,3 +10,15 @@ def test_creates_log(caplog):
 
     assert len(caplog.records) == 1
     assert caplog.records[0].levelno == INFO
+
+
+def test_trigger_uses_default_label(caplog):
+    def_label = "def_label"
+    trigger = LoggerTrigger(
+        template="${label}",
+        default_code_block_label=def_label,
+    )
+    with caplog.at_level(INFO):
+        trigger(1.0, False)
+
+    assert caplog.records[0].msg == def_label

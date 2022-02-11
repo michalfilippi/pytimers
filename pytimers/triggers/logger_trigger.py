@@ -14,6 +14,7 @@ class LoggerTrigger(BaseTrigger):
         template: str = "Finished ${label} in ${humanized_duration} [${duration}s].",
         precision: int = 3,
         humanized_precision: int = 3,
+        default_code_block_label: str = "code block",
     ):
         super().__init__()
         self.level = level
@@ -21,6 +22,7 @@ class LoggerTrigger(BaseTrigger):
         self.template = Template(template)
         self.precision = precision
         self.humanized_precision = humanized_precision
+        self.default_code_block_label = default_code_block_label
 
     def __call__(
         self,
@@ -28,6 +30,8 @@ class LoggerTrigger(BaseTrigger):
         decorator: bool,
         label: Optional[str] = None,
     ) -> None:
+        if label is None and decorator is False:
+            label = self.default_code_block_label
         self.logger.log(
             level=self.level,
             msg=self.template.substitute(
