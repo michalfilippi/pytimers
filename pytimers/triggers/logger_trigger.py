@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from string import Template
+from typing import Optional
 
 from pytimers.triggers.base_trigger import BaseTrigger
 
@@ -25,7 +26,7 @@ class LoggerTrigger(BaseTrigger):
         self,
         duration_s: float,
         decorator: bool,
-        label: str = None,
+        label: Optional[str] = None,
     ) -> None:
         self.logger.log(
             level=self.level,

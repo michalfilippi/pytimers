@@ -1,18 +1,16 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Optional
 
 
 class BaseTrigger(ABC):
-    def __init__(self):
-        pass
-
     @abstractmethod
     def __call__(
         self,
         duration_s: float,
         decorator: bool,
-        label: str = None,
+        label: Optional[str] = None,
     ) -> None:
         pass
 
