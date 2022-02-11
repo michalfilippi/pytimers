@@ -1,12 +1,20 @@
 from __future__ import annotations
 
 import inspect
+from contextvars import ContextVar
 from timeit import default_timer
-from typing import Any, Callable, Iterable, Optional
+from types import TracebackType
+from typing import Any, Callable, Iterable, Optional, Type
 
 from decorator import decorate  # type: ignore
 
+from pytimers.started_clock import StartedClock
 from pytimers.triggers import BaseTrigger
+
+
+STARTED_CLOCK_VAR: ContextVar[Optional[list[StartedClock]]] = ContextVar(
+    "started_clock", default=None
+)
 
 
 class Timer:
@@ -23,11 +31,9 @@ class Timer:
             code_block: bool.
         """
 
-        self._start_times: list[float] = []
         self._name: Optional[str] = None
-        self._names: list[str] = []
         self.triggers = triggers if triggers else []
-        self.time: Optional[float] = None
+        self._latest_time: Optional[float] = None
 
     def label(self, name: str) -> "Timer":
         """Sets name for the next timed code block. If there's no name set for code
@@ -40,18 +46,30 @@ class Timer:
         self._name = name
         return self
 
-    def __enter__(self):
-        self._start_times.append(default_timer())
-        self._names.append(self._name)
+    def __enter__(self) -> StartedClock:
+        started_timer = StartedClock(label=self._name)
+        started_clocks = STARTED_CLOCK_VAR.get()
+        if started_clocks is None:
+            STARTED_CLOCK_VAR.set([started_timer])
+        else:
+            started_clocks.append(started_timer)
+
         if self._name:
             self._name = None
-        return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        end_time = default_timer()
-        start_time = self._start_times.pop()
-        label = self._names.pop()
-        self._finish_timing(end_time - start_time, label, False)
+        return started_timer
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
+        started_clocks = STARTED_CLOCK_VAR.get()
+        if started_clocks is not None:
+            started_timer = started_clocks.pop()
+            started_timer.stop()
+            self._finish_timing(started_timer.time, started_timer.label, False)
 
     def _wrapper(self, wrapped, *args, **kwargs):
         start_time = default_timer()
@@ -76,10 +94,9 @@ class Timer:
     def _finish_timing(
         self,
         duration: float,
-        name: str,
+        name: Optional[str],
         decorator: bool,
     ) -> None:
-        self.time = duration
         for trigger in self.triggers:
             trigger(
                 duration,

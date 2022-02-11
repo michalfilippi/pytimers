@@ -1,6 +1,7 @@
 import pytest
 
-from pytimers import Timer
+from pytimers.exceptions import UnfinishedTimer
+from pytimers.timer import Timer
 from pytimers.triggers.dummy_trigger import DummyTrigger
 
 
@@ -74,12 +75,24 @@ def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger):
     assert trigger.calls[3][2] == label_1
 
 
-def test_timer_starts_with_empty_time(timer: Timer):
-    assert timer.time is None
+def test_timer_protects_unfinished_time(timer: Timer):
+    with pytest.raises(UnfinishedTimer):
+        with timer as clock:
+            clock.time
 
 
 def test_timer_stores_time(timer: Timer):
-    with timer:
+    with timer as clock:
         pass
 
-    assert timer.time is not None
+    assert clock.time > 0
+
+
+def test_timer_exposes_current_duration(timer: Timer):
+    with timer as clock:
+        assert clock.current_duration > 0
+
+
+def test_timer_clock_is_running(timer: Timer):
+    with timer as clock:
+        assert clock.current_duration != clock.current_duration

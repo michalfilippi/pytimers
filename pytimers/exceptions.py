@@ -1,0 +1,2 @@
+class UnfinishedTimer(Exception):
+    pass
