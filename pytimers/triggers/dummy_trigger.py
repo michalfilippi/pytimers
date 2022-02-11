@@ -9,9 +9,9 @@ class DummyTrigger(BaseTrigger):
         self.calls: list[tuple] = []
 
     def __call__(
-            self,
-            duration_s: float,
-            decorator: bool,
-            label: str = None,
+        self,
+        duration_s: float,
+        decorator: bool,
+        label: str = None,
     ) -> None:
         self.calls.append((duration_s, decorator, label))

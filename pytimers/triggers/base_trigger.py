@@ -8,9 +8,9 @@ class BaseTrigger(ABC):
 
     @abstractmethod
     def __call__(
-            self,
-            duration_s: float,
-            decorator: bool,
-            label: str = None,
+        self,
+        duration_s: float,
+        decorator: bool,
+        label: str = None,
     ) -> None:
         pass
