@@ -14,6 +14,21 @@ def timer(trigger) -> Timer:
     return Timer(triggers=[trigger])
 
 
+def test_custom_trigger_as_function():
+    calls = []
+    timer = Timer(triggers=[lambda *args: calls.append(args)])
+
+    with timer.label("label"):
+        pass
+
+    assert len(calls) == 1
+
+    duration_s, decorator, label = calls[0]
+    assert 0 < duration_s
+    assert decorator is False
+    assert label == "label"
+
+
 def test_timer_calls_trigger_with_correct_params(timer: Timer, trigger: DummyTrigger):
     with timer:
         pass

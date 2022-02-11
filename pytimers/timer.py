@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import inspect
 from timeit import default_timer
-from typing import Iterable, Optional
+from typing import Any, Callable, Iterable, Optional
 
 from decorator import decorate  # type: ignore
 
@@ -12,7 +12,9 @@ from pytimers.triggers import BaseTrigger
 class Timer:
     def __init__(
         self,
-        triggers: Iterable[BaseTrigger] = None,
+        triggers: Iterable[
+            BaseTrigger | Callable[[float, bool, Optional[str]], Any]
+        ] = None,
     ):
         """Initializes Timer object with custom configuration parameters.
 
@@ -80,7 +82,7 @@ class Timer:
         self.time = duration
         for trigger in self.triggers:
             trigger(
-                duration_s=duration,
-                label=name,
-                decorator=decorator,
+                duration,
+                decorator,
+                name,
             )
