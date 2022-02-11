@@ -1,116 +1,166 @@
+from __future__ import annotations
 import inspect
-from asyncio import sleep
-import logging
-from typing import Callable, List
+from typing import Callable, Awaitable
 
 import pytest
 
-from pytimers import timer
+from pytimers import Timer
+from pytimers.triggers.dummy_trigger import DummyTrigger
 
 
-pytestmark = pytest.mark.asyncio
+@pytest.fixture()
+def trigger() -> DummyTrigger:
+    return DummyTrigger()
 
 
-LOG_MESSAGE = "Inside Callable."
+@pytest.fixture()
+def timer(trigger) -> Timer:
+    return Timer(triggers=[trigger])
 
 
-def create_callables(extra_param: bool = False):
-    @timer
-    async def callable_name(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
-        """Callable docstring."""
-        await sleep(0.01)
-        logging.getLogger(__name__).info(LOG_MESSAGE)
-        return a + b + sum(args) + c + sum(kwargs.values())
-
-    class ClassWithMethod:
+def create_test_cases() -> list[
+    tuple[Callable[[Timer], Callable[..., Awaitable[int]]], list[str], str]
+]:
+    def create_callable_function(timer: Timer):
         @timer
         async def callable_name(
-            self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
-        ):
+            a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+        ) -> int:
             """Callable docstring."""
-            await sleep(0.01)
-            logging.getLogger(__name__).info(LOG_MESSAGE)
             return a + b + sum(args) + c + sum(kwargs.values())
 
-    class ClassWithStaticMethod:
-        @staticmethod
-        @timer
-        async def callable_name(a, b: int = 1, *args: int, c: int = 1, **kwargs: int):
-            """Callable docstring."""
-            await sleep(0.01)
-            logging.getLogger(__name__).info(LOG_MESSAGE)
-            return a + b + sum(args) + c + sum(kwargs.values())
+        return callable_name
 
-    class ClassWithClassMethod:
-        @classmethod
-        @timer
-        async def callable_name(
-            cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
-        ):
-            """Callable docstring."""
-            await sleep(0.01)
-            logging.getLogger(__name__).info(LOG_MESSAGE)
-            return a + b + sum(args) + c + sum(kwargs.values())
+    def create_callable_method(timer: Timer):
+        class ClassWithMethod:
+            @timer
+            async def callable_name(
+                self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            ) -> int:
+                """Callable docstring."""
+                return a + b + sum(args) + c + sum(kwargs.values())
 
-    callables = [
-        callable_name,
-        ClassWithMethod().callable_name,
-        ClassWithStaticMethod.callable_name,
-        ClassWithStaticMethod().callable_name,
-        ClassWithClassMethod.callable_name,
-        ClassWithClassMethod().callable_name,
+        return ClassWithMethod().callable_name
+
+    def create_callable_static_method_from_class(timer: Timer):
+        class ClassWithStaticMethod:
+            @staticmethod
+            @timer
+            async def callable_name(
+                a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            ) -> int:
+                """Callable docstring."""
+                return a + b + sum(args) + c + sum(kwargs.values())
+
+        return ClassWithStaticMethod.callable_name
+
+    def create_callable_static_method_from_instance(timer: Timer):
+        class ClassWithStaticMethod:
+            @staticmethod
+            @timer
+            async def callable_name(
+                a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            ) -> int:
+                """Callable docstring."""
+                return a + b + sum(args) + c + sum(kwargs.values())
+
+        return ClassWithStaticMethod().callable_name
+
+    def create_callable_class_method_from_class(timer: Timer):
+        class ClassWithClassMethod:
+            @classmethod
+            @timer
+            async def callable_name(
+                cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            ) -> int:
+                """Callable docstring."""
+                return a + b + sum(args) + c + sum(kwargs.values())
+
+        return ClassWithClassMethod.callable_name
+
+    def create_callable_class_method_from_instance(timer: Timer):
+        class ClassWithClassMethod:
+            @classmethod
+            @timer
+            async def callable_name(
+                cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            ) -> int:
+                """Callable docstring."""
+                return a + b + sum(args) + c + sum(kwargs.values())
+
+        return ClassWithClassMethod().callable_name
+
+    return [
+        (create_callable_function, [], "function"),
+        (create_callable_method, ["self"], "method"),
+        (create_callable_static_method_from_class, [], "static_method_from_class"),
+        (
+            create_callable_static_method_from_instance,
+            [],
+            "static_method_from_instance",
+        ),
+        (create_callable_class_method_from_class, ["cls"], "class_method_from_class"),
+        (
+            create_callable_class_method_from_instance,
+            ["cls"],
+            "class_method_from_instance",
+        ),
     ]
 
-    if extra_param:
-        return list(
-            zip(
-                callables,
-                [
-                    [],
-                    ["self"],
-                    [],
-                    [],
-                    ["cls"],
-                    ["cls"],
-                ],
-            )
-        )
-    else:
-        return callables
+
+test_cases, test_cases_extra_params, test_cases_names = list(zip(*create_test_cases()))
 
 
 @pytest.mark.parametrize(
-    "decorated_callable",
-    create_callables(),
+    argnames="decorated_callable_builder",
+    argvalues=test_cases,
+    ids=test_cases_names,
 )
-async def test_decorator_preserves_output(decorated_callable: Callable):
+async def test_decorator_preserves_output(
+    timer: Timer,
+    decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
+):
+    decorated_callable = decorated_callable_builder(timer)
     assert await decorated_callable(2) == 4
 
 
 @pytest.mark.parametrize(
-    "decorated_callable",
-    create_callables(),
+    argnames="decorated_callable_builder",
+    argvalues=test_cases,
+    ids=test_cases_names,
 )
-async def test_decorator_preserves_name(decorated_callable: Callable):
+def test_decorator_preserves_name(
+    timer: Timer,
+    decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
+):
+    decorated_callable = decorated_callable_builder(timer)
     assert decorated_callable.__name__ == "callable_name"
 
 
 @pytest.mark.parametrize(
-    "decorated_callable",
-    create_callables(),
+    argnames="decorated_callable_builder",
+    argvalues=test_cases,
+    ids=test_cases_names,
 )
-async def test_decorator_preserves_doc(decorated_callable: Callable):
+def test_decorator_preserves_doc(
+    timer: Timer,
+    decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
+):
+    decorated_callable = decorated_callable_builder(timer)
     assert decorated_callable.__doc__ == "Callable docstring."
 
 
 @pytest.mark.parametrize(
-    "decorated_callable,extra_params",
-    create_callables(True),
+    argnames="decorated_callable_builder,extra_params",
+    argvalues=zip(test_cases, test_cases_extra_params),
+    ids=test_cases_names,
 )
-async def test_decorator_preserves_inspection(
-    decorated_callable: Callable,
-    extra_params: List[str],
+def test_decorator_preserves_inspection(
+    timer: Timer,
+    decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
+    extra_params: list[str],
 ):
+    decorated_callable = decorated_callable_builder(timer)
     inspection = inspect.getfullargspec(decorated_callable)
 
     assert inspection.args == extra_params + ["a", "b"]
@@ -124,16 +174,21 @@ async def test_decorator_preserves_inspection(
         "args": int,
         "c": int,
         "kwargs": int,
+        "return": int,
     }
 
 
 @pytest.mark.parametrize(
-    "decorated_callable",
-    create_callables(),
+    argnames="decorated_callable_builder",
+    argvalues=test_cases,
+    ids=test_cases_names,
 )
-async def test_decorator_logs_after_function_ends(decorated_callable: Callable, caplog):
-    with caplog.at_level(logging.INFO):
-        await decorated_callable(1)
+async def test_decorator_calls_trigger(
+    trigger: DummyTrigger,
+    timer: Timer,
+    decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
+):
+    decorated_callable = decorated_callable_builder(timer)
+    await decorated_callable(1)
 
-    assert len(caplog.records) == 2
-    assert caplog.records[0].message == LOG_MESSAGE
+    assert len(trigger.calls) == 1

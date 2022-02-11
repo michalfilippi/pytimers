@@ -1,80 +1,70 @@
-import logging
-
 import pytest
 
 from pytimers import Timer
+from pytimers.triggers.dummy_trigger import DummyTrigger
 
 
-@pytest.fixture
-def default_timer():
-    return Timer()
+@pytest.fixture()
+def trigger() -> DummyTrigger:
+    return DummyTrigger()
 
 
-def test_timer_creates_info_log(default_timer, caplog):
-    with caplog.at_level(logging.INFO):
-        with default_timer:
-            pass
-
-    assert len(caplog.records) == 1
-    assert caplog.records[0].levelno == logging.INFO
+@pytest.fixture()
+def timer(trigger) -> Timer:
+    return Timer(triggers=[trigger])
 
 
-def test_timer_preserves_exception_and_logs(default_timer, caplog):
-    with caplog.at_level(logging.INFO):
-        with pytest.raises(ValueError):
-            with default_timer:
-                raise ValueError()
-
-    assert len(caplog.records) == 1
-
-
-def test_timer_uses_proper_name(default_timer, caplog):
-    with caplog.at_level(logging.INFO):
-        with default_timer.named("name_1"):
-            pass
-
-    assert "name_1" in caplog.records[0].message
-
-
-def test_timer_uses_proper_name_in_nesting(default_timer, caplog):
-    with caplog.at_level(logging.INFO):
-        with default_timer.named("name_1"):
-            with default_timer:
-                with default_timer.named("name_2"):
-                    with default_timer.named("name_3"):
-                        with default_timer.named("name_4"):
-                            pass
-
-    assert "name_4" in caplog.records[0].message
-    assert "name_3" in caplog.records[1].message
-    assert "name_2" in caplog.records[2].message
-    assert "name_1" in caplog.records[4].message
-
-
-def test_timer_creates_custom_log_message(caplog):
-    template = "Template"
-    with caplog.at_level(logging.INFO):
-        with Timer(log_template=template):
-            pass
-
-    assert caplog.records[0].message == template
-
-
-def test_timer_creates_custom_log_message_with_name(caplog):
-    name = "block_name"
-    with caplog.at_level(logging.INFO):
-        with Timer(log_template="${name}").named(name):
-            pass
-
-    assert caplog.records[0].message == name
-
-
-def test_timer_starts_with_empty_time(default_timer):
-    assert default_timer.time is None
-
-
-def test_timer_stores_time(default_timer):
-    with default_timer:
+def test_timer_calls_trigger_with_correct_params(timer: Timer, trigger: DummyTrigger):
+    with timer:
         pass
 
-    assert default_timer.time is not None
+    assert len(trigger.calls) == 1
+
+    duration_s, decorator, label = trigger.calls[0]
+    assert 0 < duration_s
+    assert decorator is False
+    assert label is None
+
+
+def test_timer_preserves_exception(timer: Timer, trigger: DummyTrigger):
+    with pytest.raises(ValueError):
+        with timer:
+            raise ValueError()
+
+    assert len(trigger.calls) == 1
+
+
+def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger):
+    label = "name_1"
+    with timer.label(label):
+        pass
+
+    assert trigger.calls[0][2] == label
+
+
+def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger):
+    label_1 = "name_1"
+    label_2 = "name_2"
+    label_3 = "name_3"
+
+    with timer.label(label_1):
+        with timer:
+            with timer.label(label_2):
+                with timer.label(label_3):
+                    pass
+
+    assert trigger.calls[0][2] == label_3
+    assert trigger.calls[1][2] == label_2
+    assert trigger.calls[2][2] is None
+    assert trigger.calls[3][2] == label_1
+
+
+def test_timer_starts_with_empty_time(timer: Timer):
+    assert timer.time is None
+
+
+def test_timer_stores_time(timer: Timer):
+    with timer:
+        pass
+
+    assert timer.time is not None

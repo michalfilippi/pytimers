@@ -138,11 +138,10 @@ from time import sleep
 
 from pytimers import timer
 
-
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
-    with timer.named("data processing pipeline"):
+    with timer.label("data processing pipeline"):
         print("Hello from code block.")
         sleep(1)
 ```
@@ -153,7 +152,7 @@ INFO:pytimers.timer:Finished data processing pipeline in 1.0051407059945632s.
 ```
 
 Timer context manager also allows you to stack context managers freely without a worry of
- interference. 
+ interference.
 
 ```python
 import logging
@@ -161,17 +160,16 @@ from time import sleep
 
 from pytimers import timer
 
-
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
-    with timer.named("data collecting pipeline"):
+    with timer.label("data collecting pipeline"):
         print("Hello from code block n.1.")
         sleep(1)
         with timer:
             print("Hello from code block n.2.")
             sleep(1)
-            with timer.named("data processing pipeline"):
+            with timer.label("data processing pipeline"):
                 print("Hello from code block n.3.")
                 sleep(1)
 ```
