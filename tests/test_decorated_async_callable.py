@@ -170,11 +170,11 @@ def test_decorator_preserves_inspection(
     assert inspection.kwonlyargs == ["c"]
     assert inspection.kwonlydefaults == {"c": 1}
     assert inspection.annotations == {
-        "b": int,
-        "args": int,
-        "c": int,
-        "kwargs": int,
-        "return": int,
+        "b": 'int',
+        "args": 'int',
+        "c": 'int',
+        "kwargs": 'int',
+        "return": 'int',
     }
 
 
