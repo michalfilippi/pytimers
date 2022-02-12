@@ -8,11 +8,12 @@ from typing import Any, Awaitable, Callable, Iterable, Optional, Type
 
 from decorator import decorate  # type: ignore
 
+from pytimers.clock_hierarchy import ClockHierarchy
 from pytimers.started_clock import StartedClock
 from pytimers.triggers import BaseTrigger
 
 
-STARTED_CLOCK_VAR: ContextVar[Optional[list[StartedClock]]] = ContextVar(
+STARTED_CLOCK_VAR: ContextVar[Optional[ClockHierarchy]] = ContextVar(
     "started_clock",
     default=None,
 )
@@ -54,11 +55,11 @@ class Timer:
 
     def __enter__(self) -> StartedClock:
         started_timer = StartedClock(label=self._name)
-        started_clocks = STARTED_CLOCK_VAR.get()
-        if started_clocks is None:
-            STARTED_CLOCK_VAR.set([started_timer])
+        clock_hierarchy = STARTED_CLOCK_VAR.get()
+        if clock_hierarchy is None:
+            STARTED_CLOCK_VAR.set(ClockHierarchy(started_timer))
         else:
-            started_clocks.append(started_timer)
+            STARTED_CLOCK_VAR.set(clock_hierarchy.add(started_timer))
 
         if self._name:
             self._name = None
@@ -71,11 +72,15 @@ class Timer:
         exc: Optional[BaseException],
         traceback: Optional[TracebackType],
     ) -> None:
-        started_clocks = STARTED_CLOCK_VAR.get()
-        if started_clocks is not None:
-            started_timer = started_clocks.pop()
-            started_timer.stop()
-            self._finish_timing(started_timer.time, started_timer.label, False)
+        clock_hierarchy = STARTED_CLOCK_VAR.get()
+        if clock_hierarchy is not None:
+            STARTED_CLOCK_VAR.set(clock_hierarchy.tail)
+            clock_hierarchy.head.stop()
+            self._finish_timing(
+                clock_hierarchy.head.time,
+                clock_hierarchy.head.label,
+                False,
+            )
 
     def _wrapper(
         self,
