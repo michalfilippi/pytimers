@@ -8,14 +8,14 @@ from typing import Any, Awaitable, Callable, Iterable, Optional, Type
 
 from decorator import decorate  # type: ignore
 
-from pytimers.clock_hierarchy import ClockHierarchy
+from pytimers.immutable_stack import ImmutableStack
 from pytimers.started_clock import StartedClock
 from pytimers.triggers import BaseTrigger
 
 
-STARTED_CLOCK_VAR: ContextVar[Optional[ClockHierarchy]] = ContextVar(
+STARTED_CLOCK_VAR: ContextVar[ImmutableStack[StartedClock]] = ContextVar(
     "started_clock",
-    default=None,
+    default=ImmutableStack.create_empty(),
 )
 
 
@@ -41,7 +41,7 @@ class Timer:
         self.triggers = list(triggers) if triggers else []
         self._latest_time: Optional[float] = None
 
-    def label(self, name: str) -> "Timer":
+    def label(self, name: str) -> Timer:
         """Sets label for the next timed code block. This label propagates to all
         triggers once the context managers is closed.
 
@@ -55,11 +55,8 @@ class Timer:
 
     def __enter__(self) -> StartedClock:
         started_timer = StartedClock(label=self._name)
-        clock_hierarchy = STARTED_CLOCK_VAR.get()
-        if clock_hierarchy is None:
-            STARTED_CLOCK_VAR.set(ClockHierarchy(started_timer))
-        else:
-            STARTED_CLOCK_VAR.set(clock_hierarchy.add(started_timer))
+        clock_stack = STARTED_CLOCK_VAR.get()
+        STARTED_CLOCK_VAR.set(clock_stack.add(started_timer))
 
         if self._name:
             self._name = None
@@ -72,15 +69,15 @@ class Timer:
         exc: Optional[BaseException],
         traceback: Optional[TracebackType],
     ) -> None:
-        clock_hierarchy = STARTED_CLOCK_VAR.get()
-        if clock_hierarchy is not None:
-            STARTED_CLOCK_VAR.set(clock_hierarchy.tail)
-            clock_hierarchy.head.stop()
-            self._finish_timing(
-                clock_hierarchy.head.time,
-                clock_hierarchy.head.label,
-                False,
-            )
+        clock_stack = STARTED_CLOCK_VAR.get()
+        started_clock, new_clock_stack = clock_stack.pop()
+        STARTED_CLOCK_VAR.set(new_clock_stack)
+        started_clock.stop()
+        self._finish_timing(
+            started_clock.time,
+            started_clock.label,
+            False,
+        )
 
     def _wrapper(
         self,
