@@ -27,3 +27,11 @@ def test_create_from_iterable():
 
     with pytest.raises(IndexError):
         stack.pop()
+
+
+def test_len_empty():
+    assert len(ImmutableStack.create_empty()) == 0
+
+
+def test_len_from_sequence():
+    assert len(ImmutableStack.create_from_iterable([1, 2, 3])) == 3

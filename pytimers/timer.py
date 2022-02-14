@@ -56,7 +56,7 @@ class Timer:
     def __enter__(self) -> StartedClock:
         started_timer = StartedClock(label=self._name)
         clock_stack = STARTED_CLOCK_VAR.get()
-        STARTED_CLOCK_VAR.set(clock_stack.add(started_timer))
+        STARTED_CLOCK_VAR.set(clock_stack.push(started_timer))
 
         if self._name:
             self._name = None
