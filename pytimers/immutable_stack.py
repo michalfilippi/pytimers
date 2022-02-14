@@ -17,12 +17,11 @@ class ImmutableStack(Generic[T], ABC):
         pass
 
     @abstractmethod
-    def empty(self) -> bool:
-        pass
-
-    @abstractmethod
     def __len__(self) -> int:
         pass
+
+    def empty(self) -> bool:
+        return len(self) == 0
 
     @staticmethod
     def create_empty() -> ImmutableStack[T]:
@@ -48,9 +47,6 @@ class NonemptyImmutableStack(ImmutableStack[T]):
     def pop(self) -> tuple[T, ImmutableStack[T]]:
         return self._head, self._tail
 
-    def empty(self) -> bool:
-        return False
-
     def __len__(self) -> int:
         return self._len
 
@@ -61,9 +57,6 @@ class EmptyImmutableStack(ImmutableStack[T]):
 
     def pop(self) -> tuple[T, ImmutableStack[T]]:
         raise IndexError("pop from emtpy stack")
-
-    def empty(self) -> bool:
-        return True
 
     def __len__(self) -> int:
         return 0
