@@ -5,6 +5,12 @@ from typing import Optional
 
 
 class BaseTrigger(ABC):
+    """This class provides timer trigger abstraction. Custom triggers can be
+    implemented using simple functions but subclassing this abstract class is the
+    preferred way. Any custom implementation has to override __call__ method where
+    the trigger logic should be provided.
+    """
+
     @abstractmethod
     def __call__(
         self,
@@ -12,10 +18,28 @@ class BaseTrigger(ABC):
         decorator: bool,
         label: Optional[str] = None,
     ) -> None:
+        """This is a trigger action entrypoint. This method is called by `Timer` once the timer
+        stops.
+
+        :param duration_s: The measured duration in seconds.
+        :param decorator: True if the timer was used as a decorator for a callable.
+        False if used as a context manager for timing code blocks.
+        :param label: The label of the measured code block provided by client before
+        entering the context manager. For decarator usage this value is set to the
+        callable name.
+        """
         pass
 
     @staticmethod
     def humanized_duration(duration_s: float, precision: int = 0) -> str:
+        """This method provides formatter for human readable duration with hours being
+        the highest level of the format.
+
+        :param duration_s: The duration in seconds to be formatted.
+        :param precision: Number of decimal places for milliseconds.
+        :return: Human readable duration as a string.
+        """
+
         hours, remainder = divmod(duration_s, 60 * 60)
         minutes, remainder = divmod(remainder, 60)
         seconds, remainder = divmod(remainder, 1)
