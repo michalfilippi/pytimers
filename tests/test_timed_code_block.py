@@ -60,6 +60,15 @@ def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger):
     assert trigger.calls[0][2] == label
 
 
+def test_timer_supports_deprecated_named(timer: Timer, trigger: DummyTrigger):
+    label = "name_1"
+    with pytest.deprecated_call():
+        with timer.named(label):
+            pass
+
+    assert trigger.calls[0][2] == label
+
+
 def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger):
     label_1 = "name_1"
     label_2 = "name_2"

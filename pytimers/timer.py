@@ -5,6 +5,7 @@ from contextvars import ContextVar
 from timeit import default_timer
 from types import TracebackType
 from typing import Any, Awaitable, Callable, Iterable, Optional, Type
+from warnings import warn
 
 from decorator import decorate  # type: ignore
 
@@ -50,6 +51,20 @@ class Timer:
             inside context manager with statement.
         """
 
+        self._name = name
+        return self
+
+    def named(self, name: str) -> Timer:
+        """This method ensures backwards compatibility. See `Timer.label` for more
+        details."""
+
+        warn(
+            message=(
+                "The `named` method will no longer be supported in future versions. "
+                "Please use `label` method instead."
+            ),
+            category=DeprecationWarning,
+        )
         self._name = name
         return self
 
