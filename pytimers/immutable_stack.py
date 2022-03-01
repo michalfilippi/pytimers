@@ -8,6 +8,10 @@ T = TypeVar("T")
 
 
 class ImmutableStack(Generic[T], ABC):
+    """Minimalistic implementation of an immutable stack. The stack is guaranteed
+    to never change and any potential change creates a new instance of the stack.
+    """
+
     @abstractmethod
     def push(self, item: T) -> ImmutableStack[T]:
         pass
