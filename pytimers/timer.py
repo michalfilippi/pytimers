@@ -35,7 +35,7 @@ class Timer:
             decorator: bool, label: str. PyTimers also provide an abstract class
             BaseTrigger to help with trigger interface implementation. See the
             BaseTrigger for more details. Any instance of BaseTrigger subclass is a
-            valid trigger and can be passed to the triggers argument.
+            valid trigger and can be passed to the argument triggers.
         """
 
         self._name: Optional[str] = None
@@ -65,8 +65,7 @@ class Timer:
             ),
             category=DeprecationWarning,
         )
-        self._name = name
-        return self
+        return self.label(name)
 
     def __enter__(self) -> StartedClock:
         started_timer = StartedClock(label=self._name)
