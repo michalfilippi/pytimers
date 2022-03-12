@@ -25,11 +25,12 @@ class Timer:
     timer finishes.
 
     :param triggers: An iterable of callables to be called after the timer finishes.
-        All triggers should accept keywords arguments duration_s: float,
-        decorator: bool, label: str. PyTimers also provide an abstract class
-        BaseTrigger to help with trigger interface implementation. See the
-        BaseTrigger for more details. Any instance of BaseTrigger subclass is a
-        valid trigger and can be passed to the argument triggers.
+        All triggers should accept keywords arguments ``duration_s: float,
+        decorator: bool, label: str``. PyTimers also provide an abstract class
+        :py:class:`BaseTrigger` to help with trigger interface implementation. See the
+        :py:class:`BaseTrigger` for more details. Any instance of
+        :py:class:`BaseTrigger` subclass is a valid trigger and can be passed to the
+        argument ``triggers``.
     """
 
     def __init__(
@@ -38,25 +39,25 @@ class Timer:
             Iterable[BaseTrigger | Callable[[float, bool, Optional[str]], Any]]
         ] = None,
     ):
-        self._name: Optional[str] = None
+        self._label_text: Optional[str] = None
         self.triggers = list(triggers) if triggers else []
         self._latest_time: Optional[float] = None
 
-    def label(self, name: str) -> Timer:
+    def label(self, text: str) -> Timer:
         """Sets label for the next timed code block. This label propagates to all
         triggers once the context managers is closed.
 
-        :param name: Code block label name.
-        :return: Returns self. This makes possible to call the method directly inside
-            context manager with statement.
+        :param text: Code block label text.
+        :return: Returns ``self``. This makes possible to call the method directly
+            inside context manager with statement.
         """
 
-        self._name = name
+        self._label_text = text
         return self
 
     def named(self, name: str) -> Timer:
-        """This method ensures backwards compatibility. See `Timer.label` for more
-        details.
+        """This method only ensures backwards compatibility. Use
+        :py:meth:`pytimers.Timer.label` instead.
 
         .. deprecated:: 3.0
         """
@@ -71,12 +72,12 @@ class Timer:
         return self.label(name)
 
     def __enter__(self) -> StartedClock:
-        started_timer = StartedClock(label=self._name)
+        started_timer = StartedClock(label=self._label_text)
         clock_stack = STARTED_CLOCK_VAR.get()
         STARTED_CLOCK_VAR.set(clock_stack.push(started_timer))
 
-        if self._name:
-            self._name = None
+        if self._label_text:
+            self._label_text = None
 
         return started_timer
 

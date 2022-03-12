@@ -17,7 +17,9 @@ class StartedClock:
 
     @property
     def time(self) -> float:
-        """Exposes measured time of the clock.
+        """Exposes measured time of the clock. You can use this property to access the
+        measured time even after the context manager is closed. This property should
+        never be used directly inside a timed code block.
 
         :return: Measured time in seconds between start and stop of the clock.
         :raise UnfinishedTimer: Clock has to be stopped before accessing elapsed time.
@@ -32,7 +34,8 @@ class StartedClock:
 
     @property
     def current_duration(self) -> float:
-        """Calculates the duration elapsed since the clock started.
+        """Calculates the current duration elapsed since the clock started. This
+        property can be used inside a timed code block.
 
         :return: Duration in seconds elapsed since the clock start.
         """

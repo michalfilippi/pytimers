@@ -7,8 +7,9 @@ from typing import Optional
 class BaseTrigger(ABC):
     """This class provides timer trigger abstraction. Custom triggers can be
     implemented using simple functions but subclassing this abstract class is the
-    preferred way. Any custom implementation has to override __call__ method where
-    the trigger logic should be provided.
+    preferred way. Any custom implementation has to override
+    :py:meth:`pytimers.BaseTrigger.__call__` method where the trigger logic
+    should be provided.
     """
 
     @abstractmethod
@@ -18,14 +19,14 @@ class BaseTrigger(ABC):
         decorator: bool,
         label: Optional[str] = None,
     ) -> None:
-        """This is a trigger action entrypoint. This method is called by `Timer` once the timer
-        stops.
+        """This is a trigger action entrypoint. This method is called in
+        :py:class:`pytimers.Timer` once the timer stops.
 
         :param duration_s: The measured duration in seconds.
-        :param decorator: True if the timer was used as a decorator for a callable.
+        :param decorator: True if the timer was used as a decorator for callable.
             False if used as a context manager for timing code blocks.
         :param label: The label of the measured code block provided by client before
-            entering the context manager. For decarator usage this value is set to the
+            entering the context manager. For decorator usage this value is set to the
             callable name.
         """
         pass
