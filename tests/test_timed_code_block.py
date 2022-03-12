@@ -99,6 +99,13 @@ def test_timer_stores_duration(timer: Timer):
     assert clock.duration() > 0
 
 
+def test_timer_duration_round(timer: Timer):
+    with timer as clock:
+        pass
+
+    assert clock.duration(0) == 0
+
+
 def test_timer_exposes_current_duration(timer: Timer):
     with timer as clock:
         assert clock.current_duration() > 0
@@ -107,6 +114,11 @@ def test_timer_exposes_current_duration(timer: Timer):
 def test_timer_clock_is_running(timer: Timer):
     with timer as clock:
         assert clock.current_duration() != clock.current_duration()
+
+
+def test_timer_current_duration_round(timer: Timer):
+    with timer as clock:
+        assert clock.current_duration(0) == 0
 
 
 async def test_timer_is_robust_to_async(timer: Timer, trigger: DummyTrigger):
