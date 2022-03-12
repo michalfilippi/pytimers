@@ -9,6 +9,14 @@ from pytimers.triggers.base_trigger import BaseTrigger
 
 class LoggerTrigger(BaseTrigger):
     """Provided trigger class for logging the measured duration using std logging library.
+
+    :param level: Log level (as understood by the std lib) used for the message.
+    :param template: Message template string containing placeholders for label,
+        duration and/or humanized_duration.
+    :param precision: Number of decimal places for the message duration in seconds.
+    :param humanized_precision: Number of decimal places for milliseconds in human
+        readable duration in the message.
+    :param default_code_block_label: Label used for code blocks with missing label.
     """
 
     def __init__(
@@ -19,16 +27,6 @@ class LoggerTrigger(BaseTrigger):
         humanized_precision: int = 3,
         default_code_block_label: str = "code block",
     ):
-        """
-        :param level: Log level (as understood by the std lib) used for the message.
-        :param template: Message template string containing placeholders for label,
-        duration and/or humanized_duration.
-        :param precision: Number of decimal places for the message duration in seconds.
-        :param humanized_precision: Number of decimal places for milliseconds in human
-        readable duration in the message.
-        :param default_code_block_label: Label used for code blocks with missing label.
-        """
-
         super().__init__()
         self.level = level
         self.logger = logging.getLogger(__name__)

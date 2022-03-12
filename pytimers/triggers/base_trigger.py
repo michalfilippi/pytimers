@@ -23,10 +23,10 @@ class BaseTrigger(ABC):
 
         :param duration_s: The measured duration in seconds.
         :param decorator: True if the timer was used as a decorator for a callable.
-        False if used as a context manager for timing code blocks.
+            False if used as a context manager for timing code blocks.
         :param label: The label of the measured code block provided by client before
-        entering the context manager. For decarator usage this value is set to the
-        callable name.
+            entering the context manager. For decarator usage this value is set to the
+            callable name.
         """
         pass
 

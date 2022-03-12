@@ -21,23 +21,23 @@ STARTED_CLOCK_VAR: ContextVar[ImmutableStack[StartedClock]] = ContextVar(
 
 
 class Timer:
+    """Initializes Timer object with a set of triggers to be applied after the
+    timer finishes.
+
+    :param triggers: An iterable of callables to be called after the timer finishes.
+        All triggers should accept keywords arguments duration_s: float,
+        decorator: bool, label: str. PyTimers also provide an abstract class
+        BaseTrigger to help with trigger interface implementation. See the
+        BaseTrigger for more details. Any instance of BaseTrigger subclass is a
+        valid trigger and can be passed to the argument triggers.
+    """
+
     def __init__(
         self,
         triggers: Optional[
             Iterable[BaseTrigger | Callable[[float, bool, Optional[str]], Any]]
         ] = None,
     ):
-        """Initializes Timer object with a set of triggers to be applied after the
-        timer finishes.
-
-        :param triggers: An iterable of callables to be called after the timer finishes.
-            All triggers should accept keywords arguments duration_s: float,
-            decorator: bool, label: str. PyTimers also provide an abstract class
-            BaseTrigger to help with trigger interface implementation. See the
-            BaseTrigger for more details. Any instance of BaseTrigger subclass is a
-            valid trigger and can be passed to the argument triggers.
-        """
-
         self._name: Optional[str] = None
         self.triggers = list(triggers) if triggers else []
         self._latest_time: Optional[float] = None
@@ -47,8 +47,8 @@ class Timer:
         triggers once the context managers is closed.
 
         :param name: Code block label name.
-        :return: Returns self. This is comes makes possible to call the method directly
-            inside context manager with statement.
+        :return: Returns self. This makes possible to call the method directly inside
+            context manager with statement.
         """
 
         self._name = name
@@ -56,7 +56,10 @@ class Timer:
 
     def named(self, name: str) -> Timer:
         """This method ensures backwards compatibility. See `Timer.label` for more
-        details."""
+        details.
+
+        .. deprecated:: 3.0
+        """
 
         warn(
             message=(
