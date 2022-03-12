@@ -98,7 +98,7 @@ To measure time of any piece of code not enclosed in a callable object you can u
     Hello from code block.
     INFO:pytimers.triggers.logger_trigger:Finished code block in 1s 1.143ms [1.001s].
 
-Entering the context manager actually returns an instance of a :py:class:`pytimers.clock.StartedClock`. This allows you to access the current duration from inside of the code block but also the measured duration after the context manager is closed.
+Entering the context manager actually returns an instance of a :py:class:`pytimers.clock.Clock`. This allows you to access the current duration from inside of the code block but also the measured duration after the context manager is closed.
 
 .. code-block:: python
 
