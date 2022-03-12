@@ -1,5 +1,5 @@
 # pytimers dependencies
-decorator
+decorator>=4.0.0
 
 # test dependencies
 black

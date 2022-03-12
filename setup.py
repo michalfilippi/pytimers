@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     setup_requires=["setuptools-git-versioning"],
     install_requires=[
-        "decorator",
+        "decorator>=4.0.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
