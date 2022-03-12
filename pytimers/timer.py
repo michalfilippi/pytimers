@@ -10,12 +10,12 @@ from warnings import warn
 from decorator import decorate  # type: ignore
 
 from pytimers.immutable_stack import ImmutableStack
-from pytimers.started_clock import StartedClock
+from pytimers.clock import Clock
 from pytimers.triggers import BaseTrigger
 
 
-STARTED_CLOCK_VAR: ContextVar[ImmutableStack[StartedClock]] = ContextVar(
-    "started_clock",
+STARTED_CLOCK_VAR: ContextVar[ImmutableStack[Clock]] = ContextVar(
+    "clock",
     default=ImmutableStack.create_empty(),
 )
 
@@ -71,8 +71,8 @@ class Timer:
         )
         return self.label(name)
 
-    def __enter__(self) -> StartedClock:
-        started_timer = StartedClock(label=self._label_text)
+    def __enter__(self) -> Clock:
+        started_timer = Clock(label=self._label_text)
         clock_stack = STARTED_CLOCK_VAR.get()
         STARTED_CLOCK_VAR.set(clock_stack.push(started_timer))
 
@@ -88,12 +88,12 @@ class Timer:
         traceback: Optional[TracebackType],
     ) -> None:
         clock_stack = STARTED_CLOCK_VAR.get()
-        started_clock, new_clock_stack = clock_stack.pop()
+        clock, new_clock_stack = clock_stack.pop()
         STARTED_CLOCK_VAR.set(new_clock_stack)
-        started_clock.stop()
+        clock.stop()
         self._finish_timing(
-            started_clock.time,
-            started_clock.label,
+            clock.duration(),
+            clock.label,
             False,
         )
 

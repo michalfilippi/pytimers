@@ -9,8 +9,10 @@ Timers
 .. autoclass:: pytimers.Timer
     :members:
 
-.. autoclass:: pytimers.started_clock.StartedClock
+.. autoclass:: pytimers.clock.StartedClock
     :members:
+
+.. autoexception:: pytimers.exceptions.UnfinishedTimer
 
 Triggers
 --------

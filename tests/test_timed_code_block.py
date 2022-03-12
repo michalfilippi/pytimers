@@ -2,7 +2,7 @@ from asyncio import gather, sleep
 
 import pytest
 
-from pytimers.exceptions import UnfinishedTimer
+from pytimers.exceptions import ClockStillRunning
 from pytimers.timer import Timer
 from pytimers.triggers.dummy_trigger import DummyTrigger
 
@@ -86,27 +86,27 @@ def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger):
     assert trigger.calls[3][2] == label_1
 
 
-def test_timer_protects_unfinished_time(timer: Timer):
-    with pytest.raises(UnfinishedTimer):
+def test_timer_protects_unfinished_duration(timer: Timer):
+    with pytest.raises(ClockStillRunning):
         with timer as clock:
-            _ = clock.time
+            _ = clock.duration()
 
 
-def test_timer_stores_time(timer: Timer):
+def test_timer_stores_duration(timer: Timer):
     with timer as clock:
         pass
 
-    assert clock.time > 0
+    assert clock.duration() > 0
 
 
 def test_timer_exposes_current_duration(timer: Timer):
     with timer as clock:
-        assert clock.current_duration > 0
+        assert clock.current_duration() > 0
 
 
 def test_timer_clock_is_running(timer: Timer):
     with timer as clock:
-        assert clock.current_duration != clock.current_duration
+        assert clock.current_duration() != clock.current_duration()
 
 
 async def test_timer_is_robust_to_async(timer: Timer, trigger: DummyTrigger):

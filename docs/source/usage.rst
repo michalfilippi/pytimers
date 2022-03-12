@@ -3,14 +3,16 @@ Usage
 
 The whole purpose of this micro library is to provide easy and quick access to measuring the time it takes to run a piece of code without populating the codebase with reoccurring and unnecessary variables. The library allows you to measure the run time of your code in two ways. Using decorators for callables and using context manager to measure run time of any code block using the ``with`` statement.
 
-The timer on it's own does not do anything. But when the time
+The timer on it's own does not do anything unless provided with triggers (see :ref:`triggers`). In the following examples we will be using ``pytimers.timer`` which is a provided instance of :py:class:`pytimers.Timer` containing single trigger that logs measured time to std output using standard logging library :py:mod:`logging` using a trigger instance of :py:class:`pytimers.LoggerTrigger`.
 
-The
 
 Timer Decorator
 ---------------
 
-The timer decorator can be applied to both synchronous and asynchronous functions and methods. Decorating classes is currently not supported and will raise :py:exc:`TypeError`. PyTimers leverage python library `decorator <https://github.com/micheles/decorator>`_ to make sure decorating will preserve the function/method signature, name and docstring.
+The timer decorator can be applied to both synchronous and asynchronous functions and methods. PyTimers leverage python library `decorator <https://github.com/micheles/decorator>`_ to make sure decorating will preserve the function/method signature, name and docstring.
+
+.. note::
+    Decorating classes is currently not supported and will raise :py:exc:`TypeError`.
 
 .. code-block:: python
 
@@ -41,7 +43,7 @@ The timer decorator can be applied to both synchronous and asynchronous function
 Class Methods and Static methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To combine timer decorator with decorators :py:func:`staticmethod` and :py:func:`classmethod` you have to first apply timer decorator. Applying the decorators the other way around will result in :py:exc:`TypeError` exception.
+To combine ``timer`` decorator with decorators :py:func:`staticmethod` and :py:func:`classmethod` you have to first apply ``timer`` decorator. Applying the decorators the other way around will result in :py:exc:`TypeError` exception.
 
 .. code-block:: python
 
@@ -74,7 +76,7 @@ To combine timer decorator with decorators :py:func:`staticmethod` and :py:func:
 Timer Context Manager
 ---------------------
 
-To measure time of any code not enclosed in a callable object you can use timer context manager.
+To measure time of any piece of code not enclosed in a callable object you can use ``timer`` context manager capabilities.
 
 .. code-block:: python
 
@@ -96,7 +98,7 @@ To measure time of any code not enclosed in a callable object you can use timer 
     Hello from code block.
     INFO:pytimers.triggers.logger_trigger:Finished code block in 1s 1.143ms [1.001s].
 
-You can use the latest time measurement from the timer in your own code by accessing the `time` field.
+Entering the context manager actually returns an instance of a :py:class:`pytimers.clock.StartedClock`. This allows you to access the current duration from inside of the code block but also the measured duration after the context manager is closed.
 
 .. code-block:: python
 
@@ -110,7 +112,8 @@ You can use the latest time measurement from the timer in your own code by acces
 
     if __name__ == "__main__":
         with timer as t:
-            print("We want to run this under 5s.")
+            sleep(1)
+            print(f"We want to run this under 5s and so far it took {t.current_duration}.")
             sleep(1)
         print(f"We still had {5 - t.time}s remaining.")
 
@@ -176,5 +179,11 @@ Timer context manager also allows you to stack context managers freely without a
 Async Compatibility
 -------------------
 
-Custom Triggers
----------------
+
+.. _triggers:
+
+Triggers
+--------
+
+
+
