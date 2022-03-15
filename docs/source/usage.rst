@@ -115,13 +115,13 @@ Entering the context manager actually returns an instance of a :py:class:`pytime
             sleep(1)
             print(f"We want to run this under 5s and so far it took {t.current_duration}.")
             sleep(1)
-        print(f"We still had {5 - t.time}s remaining.")
+        print(f"We still had {5 - t.duration}s remaining.")
 
 .. code-block:: console
 
-    We want to run this under 5s.
-    INFO:pytimers.triggers.logger_trigger:Finished code block in 1s 1.177ms [1.001s].
-    We still had 3.998822992987698s remaining.
+    We want to run this under 5s and so far it took 1.0001475979988754.
+    INFO:pytimers.triggers.logger_trigger:Finished code block in 2s 1.384ms [2.001s].
+    We still had 2.998615708000216s remaining.
 
 Block of code can also be named to increase log readability.
 
@@ -176,8 +176,9 @@ Timer context manager also allows you to stack context managers freely without a
     INFO:pytimers.triggers.logger_trigger:Finished code block in 2s 2.895ms [2.003s].
     INFO:pytimers.triggers.logger_trigger:Finished data collecting pipeline in 3s 4.176ms [3.004s].
 
-Async Compatibility
--------------------
+
+.. note::
+    Timer context manager fully supports async code execution using :py:class:`contextvars.ContextVar`.
 
 
 .. _triggers:
@@ -185,5 +186,62 @@ Async Compatibility
 Triggers
 --------
 
+Triggers are an abstraction for the action performed after each timer is finished. The simplest trigger can just log the measured time using standard :py:mod:`logging` library. Trigger doing just that is already provided in the library as :py:class:`pytimers.LoggerTrigger`.
+
+Triggers can be implemented in two ways. Either using a function with keywords arguments ``duration_s: float, decorator: bool, label: str`` or by defining a :py:class:`pytimers.BaseTrigger` subclass.
+
+Function Based Trigger
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    import logging
+    from time import sleep
+
+    from pytimers import Timer
 
 
+    def custom_trigger(duration_s: float, decorator: bool, label: str):
+        print(f"Measured duration is {duration_s}s.")
+
+    if __name__ == "__main__":
+        timer = Timer([custom_trigger])
+
+        with timer:
+            sleep(1)
+
+.. code-block:: console
+
+    Measured duration is 1.0010350150005252s.
+
+BaseTrigger Subclass Trigger
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    import logging
+    from time import sleep
+    from typing import Optional
+
+    from pytimers import Timer, BaseTrigger
+
+
+    class CustomTrigger(BaseTrigger):
+        def __call__(
+            self,
+            duration_s: float,
+            decorator: bool,
+            label: Optional[str] = None,
+        ) -> None:
+            print(f"Measured duration is {duration_s}s.")
+
+
+    if __name__ == "__main__":
+        timer = Timer([CustomTrigger()])
+
+        with timer:
+            sleep(1)
+
+.. code-block:: console
+
+    Measured duration is 1.0010350150005252s.

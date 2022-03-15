@@ -1,7 +1,11 @@
 Introduction to Pytimers
 ========================
 
-Welcome to the Pytimers documentation page. Here is the content:
+Welcome to the Pytimers documentation page.
+
+.. include:: abstract.rst
+
+For details go through the following pages.
 
 .. toctree::
    :maxdepth: 3
