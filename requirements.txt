@@ -1,3 +1,11 @@
-pytest==6.2.2
-decorator==4.4.2
-pytest-asyncio==0.14.0
+# pytimers dependencies
+decorator>=4.0.0
+
+# test dependencies
+black
+flake8
+flake8-import-order
+mypy
+pytest
+pytest-asyncio
+pytest-cov
