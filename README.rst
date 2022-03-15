@@ -1,10 +1,9 @@
 Pytimers
 ========
 
-.. include:: docs/source/a.rst
+.. include:: docs/source/abstract.rst
 
-See the full documentation: [https://pytimers.readthedocs.io/en/latest/](https://pytimers.readthedocs.io/en/latest/)
-
+See the full `Documentation <https://pytimers.readthedocs.io/en/latest/>`_.
 
 Build Status
 ~~~~~~~~~~~~
