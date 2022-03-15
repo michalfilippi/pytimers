@@ -11,8 +11,7 @@ class Clock:
         self._duration: Optional[float] = None
 
     def stop(self) -> None:
-        """Stops the running clock.
-        """
+        """Stops the running clock."""
 
         self._duration = default_timer() - self.start_time
 
@@ -25,7 +24,8 @@ class Clock:
         :param precision: Number of decimal places of the returned time. If set to
             ``None`` the full precision is returned.
         :return: Measured time in seconds between start and stop of the clock.
-        :raise pytimers.exceptions.ClockStillRunning: Clock has to be stopped before accessing elapsed time.
+        :raise pytimers.exceptions.ClockStillRunning: Clock has to be stopped before
+            accessing elapsed time.
         """
 
         if self._duration is None:

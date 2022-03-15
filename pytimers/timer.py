@@ -9,8 +9,8 @@ from warnings import warn
 
 from decorator import decorate  # type: ignore
 
-from pytimers.immutable_stack import ImmutableStack
 from pytimers.clock import Clock
+from pytimers.immutable_stack import ImmutableStack
 from pytimers.triggers import BaseTrigger
 
 
