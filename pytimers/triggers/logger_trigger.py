@@ -10,9 +10,11 @@ from pytimers.triggers.base_trigger import BaseTrigger
 class LoggerTrigger(BaseTrigger):
     """Provided trigger class for logging the measured duration using std logging library.
 
-    :param level: Log level (as understood by the std lib) used for the message.
-    :param template: Message template string containing placeholders for label,
-        duration and/or humanized_duration.
+    :param level: Log level (as understood by the standard logging library
+        :py:mod:`logging`) used for the message.
+    :param template: Message `template string
+        <https://docs.python.org/3/library/string.html#template-strings>`_
+        containing placeholders for label, duration and/or humanized_duration.
     :param precision: Number of decimal places for the message duration in seconds.
     :param humanized_precision: Number of decimal places for milliseconds in human
         readable duration in the message.

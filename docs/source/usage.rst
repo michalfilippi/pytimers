@@ -190,6 +190,8 @@ Triggers are an abstraction for the action performed after each timer is finishe
 
 Triggers can be implemented in two ways. Either using a function with keywords arguments ``duration_s: float, decorator: bool, label: str`` or by defining a :py:class:`pytimers.BaseTrigger` subclass.
 
+The following two examples shows how to implement a trivial custom trigger using both methods.
+
 Function Based Trigger
 ~~~~~~~~~~~~~~~~~~~~~~
 
