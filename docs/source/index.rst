@@ -3,7 +3,9 @@ Introduction to Pytimers
 
 Welcome to the Pytimers documentation page.
 
-.. include:: abstract.rst
+.. include:: ../../README.rst
+  :start-after: inclusion-marker-start
+  :end-before: inclusion-marker-end
 
 For details go through the following pages.
 
