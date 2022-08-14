@@ -10,7 +10,7 @@ setuptools.setup(
     author_email="michal.filippi@gmail.com",
     description="Measuring time to run functions, methods or blocks of code made easy.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://github.com/michalfilippi/pytimers",
     packages=setuptools.find_packages(),
     setup_requires=["setuptools-git-versioning"],
