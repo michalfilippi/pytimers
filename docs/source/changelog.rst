@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Release 3.1
+-----------
+
+* Added ``py.typed`` file to mark full type checking compliance.
+* Created manually triggered release pipeline to `Test PyPi <https://test.pypi.org/project/pytimers/>`_.
+
+
 Release 3.0
 -----------
 
