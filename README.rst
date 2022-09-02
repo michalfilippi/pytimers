@@ -69,6 +69,10 @@ PyPi
 .. image:: https://img.shields.io/pypi/v/pytimers.svg
    :target: https://pypi.python.org/pypi/pytimers/
 
+.. image:: https://img.shields.io/pypi/v/pytimers.svg
+   :target: https://pypi.python.org/pypi/pytimers/
+   :alt: PyPi
+
 .. |PyPi| image:: https://img.shields.io/pypi/v/pytimers.svg
    :target: https://pypi.python.org/pypi/pytimers/
 
