@@ -1,7 +1,7 @@
 from pytimers.triggers.dummy_trigger import DummyTrigger
 
 
-def test_correct_call_content():
+def test_correct_call_content() -> None:
     trigger = DummyTrigger()
     params = (1.0, True, "label")
     trigger(*params)
