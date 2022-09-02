@@ -58,6 +58,8 @@ Build Status
    :alt: Code Style Check
    :align: left
 
+|
+
 PyPi
 ~~~~
 
@@ -86,3 +88,5 @@ PyPi
    :target: https://pypi.python.org/pypi/pytimers/
    :alt: PyPi - Implementation
    :align: left
+
+|
