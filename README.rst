@@ -66,14 +66,17 @@ Build Status
 PyPi
 ~~~~
 
-.. |PyPi| image:: https://img.shields.io/pypi/v/pytimers
+.. image:: https://img.shields.io/pypi/v/pytimers.svg
    :target: https://pypi.python.org/pypi/pytimers/
 
-.. |PyPI - License| image:: https://img.shields.io/pypi/l/pytimers
+.. |PyPi| image:: https://img.shields.io/pypi/v/pytimers.svg
    :target: https://pypi.python.org/pypi/pytimers/
 
-.. |PyPi - Python Version| image:: https://img.shields.io/pypi/pyversions/pytimers
+.. |PyPI - License| image:: https://img.shields.io/pypi/l/pytimers.svg
    :target: https://pypi.python.org/pypi/pytimers/
 
-.. |PyPi - Implementation| image:: https://img.shields.io/pypi/implementation/pytimers
+.. |PyPi - Python Version| image:: https://img.shields.io/pypi/pyversions/pytimers.svg
+   :target: https://pypi.python.org/pypi/pytimers/
+
+.. |PyPi - Implementation| image:: https://img.shields.io/pypi/implementation/pytimers.svg
    :target: https://pypi.python.org/pypi/pytimers/
