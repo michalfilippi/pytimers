@@ -21,9 +21,9 @@ setuptools.setup(
     setuptools_git_versioning={
         "enabled": True,
         "version_file": VERSION_FILE,
-        "count_commits_from_version_file": True,  # enable commits tracking
-        "dev_template": "{tag}.dev{ccount}",  # suffix for versions will be .dev
-        "dirty_template": "{tag}.dev{ccount}",  # same thing here
+        "count_commits_from_version_file": True,
+        "dev_template": "{tag}.dev{timestamp:%Y%m%d%H%M%S}+{sha}.{ccount}",
+        "dirty_template": "{tag}.dev{timestamp:%Y-%m-%dT%H-%M-%S}+{sha}.{ccount}",
     },
     install_requires=[
         "decorator>=4.0.0",
