@@ -48,37 +48,45 @@ See the full `Documentation <https://pytimers.readthedocs.io/en/latest/>`_.
 Build Status
 ~~~~~~~~~~~~
 
-.. figure:: https://github.com/michalfilippi/pytimers/workflows/tests/badge.svg
-    :alt: tests
+.. image:: https://github.com/michalfilippi/pytimers/actions/workflows/test.yml/badge.svg
+   :alt: Unit Tests
+   :align: left
 
+|
 
-.. figure:: https://github.com/michalfilippi/pytimers/workflows/flake8/badge.svg
-    :alt: flake8
+.. image:: https://github.com/michalfilippi/pytimers/actions/workflows/code_style.yml/badge.svg
+   :alt: Code Style Check
+   :align: left
 
-
-.. figure:: https://github.com/michalfilippi/pytimers/workflows/black/badge.svg
-    :alt: black
-
-.. figure:: https://github.com/michalfilippi/pytimers/workflows/mypy/badge.svg
-    :alt: mypy
-
+|
 
 PyPi
 ~~~~
 
+.. image:: https://img.shields.io/pypi/v/pytimers.svg
+   :target: https://pypi.python.org/pypi/pytimers/
+   :alt: PyPi
+   :align: left
 
-.. figure:: https://img.shields.io/pypi/v/pytimers
-    :alt: PyPi
-    :target: https://pypi.python.org/pypi/pytimers/
+|
 
-.. figure:: https://img.shields.io/pypi/l/pytimers
-    :alt: PyPI - License
-    :target: https://pypi.python.org/pypi/pytimers/
+.. image:: https://img.shields.io/pypi/l/pytimers.svg
+   :target: https://pypi.python.org/pypi/pytimers/
+   :alt: PyPI - License
+   :align: left
 
-.. figure:: https://img.shields.io/pypi/pyversions/pytimers
-    :alt: PyPi - Python Version
-    :target: https://pypi.python.org/pypi/pytimers/
+|
 
-.. figure:: https://img.shields.io/pypi/implementation/pytimers
-    :alt: PyPi - Implementation
-    :target: https://pypi.python.org/pypi/pytimers/
+.. image:: https://img.shields.io/pypi/pyversions/pytimers.svg
+   :target: https://pypi.python.org/pypi/pytimers/
+   :alt: PyPi - Python Version
+   :align: left
+
+|
+
+.. image:: https://img.shields.io/pypi/implementation/pytimers.svg
+   :target: https://pypi.python.org/pypi/pytimers/
+   :alt: PyPi - Implementation
+   :align: left
+
+|

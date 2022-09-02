@@ -15,81 +15,116 @@ def trigger() -> DummyTrigger:
 
 
 @pytest.fixture()
-def timer(trigger) -> Timer:
+def timer(trigger: DummyTrigger) -> Timer:
     return Timer(triggers=[trigger])
 
 
 def create_test_cases() -> list[
     tuple[Callable[[Timer], Callable[..., Awaitable[int]]], list[str], str]
 ]:
-    def create_callable_function(timer: Timer):
+    def create_callable_function(
+        timer: Timer,
+    ) -> Callable[..., Awaitable[int]]:
         @timer
-        async def callable_name(
-            a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+        async def callable_name(  # type: ignore
+            a,
+            b: int = 1,
+            *args: int,
+            c: int = 1,
+            **kwargs: int,
         ) -> int:
             """Callable docstring."""
-            return a + b + sum(args) + c + sum(kwargs.values())
+            return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return callable_name
+        return callable_name  # type: ignore
 
-    def create_callable_method(timer: Timer):
+    def create_callable_method(
+        timer: Timer,
+    ) -> Callable[..., Awaitable[int]]:
         class ClassWithMethod:
             @timer
-            async def callable_name(
-                self, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            async def callable_name(  # type: ignore
+                self,
+                a,
+                b: int = 1,
+                *args: int,
+                c: int = 1,
+                **kwargs: int,
             ) -> int:
                 """Callable docstring."""
-                return a + b + sum(args) + c + sum(kwargs.values())
+                return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithMethod().callable_name
+        return ClassWithMethod().callable_name  # type: ignore
 
-    def create_callable_static_method_from_class(timer: Timer):
+    def create_callable_static_method_from_class(
+        timer: Timer,
+    ) -> Callable[..., Awaitable[int]]:
         class ClassWithStaticMethod:
             @staticmethod
             @timer
-            async def callable_name(
+            async def callable_name(  # type: ignore
                 a, b: int = 1, *args: int, c: int = 1, **kwargs: int
             ) -> int:
                 """Callable docstring."""
-                return a + b + sum(args) + c + sum(kwargs.values())
+                return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithStaticMethod.callable_name
+        return ClassWithStaticMethod.callable_name  # type: ignore
 
-    def create_callable_static_method_from_instance(timer: Timer):
+    def create_callable_static_method_from_instance(
+        timer: Timer,
+    ) -> Callable[..., Awaitable[int]]:
         class ClassWithStaticMethod:
             @staticmethod
             @timer
-            async def callable_name(
-                a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            async def callable_name(  # type: ignore
+                a,
+                b: int = 1,
+                *args: int,
+                c: int = 1,
+                **kwargs: int,
             ) -> int:
                 """Callable docstring."""
-                return a + b + sum(args) + c + sum(kwargs.values())
+                return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithStaticMethod().callable_name
+        return ClassWithStaticMethod().callable_name  # type: ignore
 
-    def create_callable_class_method_from_class(timer: Timer):
+    def create_callable_class_method_from_class(
+        timer: Timer,
+    ) -> Callable[..., Awaitable[int]]:
         class ClassWithClassMethod:
             @classmethod
             @timer
-            async def callable_name(
-                cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            async def callable_name(  # type: ignore
+                cls,
+                a,
+                b: int = 1,
+                *args: int,
+                c: int = 1,
+                **kwargs: int,
             ) -> int:
                 """Callable docstring."""
-                return a + b + sum(args) + c + sum(kwargs.values())
+                return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithClassMethod.callable_name
+        return ClassWithClassMethod.callable_name  # type: ignore
 
-    def create_callable_class_method_from_instance(timer: Timer):
+    def create_callable_class_method_from_instance(
+        timer: Timer,
+    ) -> Callable[..., Awaitable[int]]:
         class ClassWithClassMethod:
             @classmethod
             @timer
-            async def callable_name(
-                cls, a, b: int = 1, *args: int, c: int = 1, **kwargs: int
+            async def callable_name(  # type: ignore
+                cls,
+                a,
+                b: int = 1,
+                *args: int,
+                c: int = 1,
+                **kwargs: int,
             ) -> int:
                 """Callable docstring."""
-                return a + b + sum(args) + c + sum(kwargs.values())
+                return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithClassMethod().callable_name
+        return ClassWithClassMethod().callable_name  # type: ignore
 
     return [
         (create_callable_function, [], "function"),
@@ -120,7 +155,7 @@ test_cases, test_cases_extra_params, test_cases_names = list(zip(*create_test_ca
 async def test_decorator_preserves_output(
     timer: Timer,
     decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
-):
+) -> None:
     decorated_callable = decorated_callable_builder(timer)
     assert await decorated_callable(2) == 4
 
@@ -133,7 +168,7 @@ async def test_decorator_preserves_output(
 def test_decorator_preserves_name(
     timer: Timer,
     decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
-):
+) -> None:
     decorated_callable = decorated_callable_builder(timer)
     assert decorated_callable.__name__ == "callable_name"
 
@@ -146,7 +181,7 @@ def test_decorator_preserves_name(
 def test_decorator_preserves_doc(
     timer: Timer,
     decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
-):
+) -> None:
     decorated_callable = decorated_callable_builder(timer)
     assert decorated_callable.__doc__ == "Callable docstring."
 
@@ -160,7 +195,7 @@ def test_decorator_preserves_inspection(
     timer: Timer,
     decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
     extra_params: list[str],
-):
+) -> None:
     decorated_callable = decorated_callable_builder(timer)
     inspection = inspect.getfullargspec(decorated_callable)
 
@@ -188,7 +223,7 @@ async def test_decorator_calls_trigger(
     trigger: DummyTrigger,
     timer: Timer,
     decorated_callable_builder: Callable[[Timer], Callable[..., Awaitable[int]]],
-):
+) -> None:
     decorated_callable = decorated_callable_builder(timer)
     await decorated_callable(1)
 

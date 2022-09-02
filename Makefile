@@ -4,10 +4,10 @@ test:
 	python -m pytest tests --cov pytimers --cov-report term-missing --no-cov-on-fail
 
 black:
-	black .
+	black pytimers tests
 
 mypy:
-	mypy pytimers
+	mypy pytimers tests
 
 flake8:
 	flake8 pytimers tests
