@@ -33,12 +33,12 @@ class BaseTrigger(ABC):
 
     @staticmethod
     def humanized_duration(duration_s: float, precision: int = 0) -> str:
-        """This method provides formatter for human readable duration with hours being
+        """This method provides formatter for human-readable duration with hours being
         the highest level of the format.
 
         :param duration_s: The duration in seconds to be formatted.
         :param precision: Number of decimal places for milliseconds.
-        :return: Human readable duration as a string.
+        :return: Human-readable duration as a string.
         """
 
         hours, remainder = divmod(duration_s, 60 * 60)
