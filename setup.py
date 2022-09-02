@@ -22,8 +22,8 @@ setuptools.setup(
         "enabled": True,
         "version_file": VERSION_FILE,
         "count_commits_from_version_file": True,
-        "dev_template": "{tag}.dev{timestamp:%Y%m%d%H%M%S}+{sha}.{ccount}",
-        "dirty_template": "{tag}.dev{timestamp:%Y-%m-%dT%H-%M-%S}+{sha}.{ccount}",
+        "dev_template": "{tag}.dev{timestamp:%Y%m%d%H%M%S}",
+        "dirty_template": "{tag}.dev{timestamp:%Y%m%d%H%M%S}",
     },
     install_requires=[
         "decorator>=4.0.0",
