@@ -1,6 +1,7 @@
+name: Unit Tests
 
-name: tests
 on: push
+
 jobs:
   pytest:
     runs-on: ubuntu-latest
