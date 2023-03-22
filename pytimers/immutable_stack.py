@@ -11,12 +11,24 @@ class ImmutableStack(Generic[T], ABC):
     to never change and any potential change creates a new instance of the stack.
     """
 
-    @abstractmethod
     def push(self, item: T) -> ImmutableStack[T]:
-        pass
+        """Pushes a new item to the top of the stack.
+
+        :param item: An item to be pushed to the stack.
+        :return: New immutable stack object containing the new item and all items
+            present in the original stack.
+        """
+        return NonemptyImmutableStack(item, self)
 
     @abstractmethod
     def pop(self) -> tuple[T, ImmutableStack[T]]:
+        """Pops the top item from the stack.
+
+        :return: Tuple of the popped item and the new immutable stack containing all
+            items from the original stack except the top item.
+        :raises: IndexError
+        """
+
         pass
 
     @abstractmethod
@@ -44,9 +56,6 @@ class NonemptyImmutableStack(ImmutableStack[T]):
         self._tail = tail
         self._len = len(tail) + 1
 
-    def push(self, item: T) -> ImmutableStack[T]:
-        return NonemptyImmutableStack(item, self)
-
     def pop(self) -> tuple[T, ImmutableStack[T]]:
         return self._head, self._tail
 
@@ -55,9 +64,6 @@ class NonemptyImmutableStack(ImmutableStack[T]):
 
 
 class EmptyImmutableStack(ImmutableStack[T]):
-    def push(self, item: T) -> ImmutableStack[T]:
-        return NonemptyImmutableStack(item, self)
-
     def pop(self) -> tuple[T, ImmutableStack[T]]:
         raise IndexError("pop from emtpy stack")
 
