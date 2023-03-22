@@ -19,7 +19,7 @@ def timer(trigger: DummyTrigger) -> Timer:
     return Timer(triggers=[trigger])
 
 
-def create_test_cases() -> (
+def create_test_cases() -> (  # noqa: C901
     list[tuple[Callable[[Timer], Callable[..., Awaitable[int]]], list[str], str]]
 ):
     def create_callable_function(
