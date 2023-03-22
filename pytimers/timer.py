@@ -13,7 +13,6 @@ from pytimers.clock import Clock
 from pytimers.immutable_stack import ImmutableStack
 from pytimers.triggers import BaseTrigger
 
-
 STARTED_CLOCK_VAR: ContextVar[ImmutableStack[Clock]] = ContextVar(
     "clock",
     default=ImmutableStack.create_empty(),
