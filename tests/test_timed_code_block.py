@@ -47,9 +47,8 @@ def test_timer_calls_trigger_with_correct_params(
 
 
 def test_timer_preserves_exception(timer: Timer, trigger: DummyTrigger) -> None:
-    with pytest.raises(ValueError):
-        with timer:
-            raise ValueError()
+    with pytest.raises(ValueError, match="msg"), timer:
+        raise ValueError("msg")
 
     assert len(trigger.calls) == 1
 
@@ -64,9 +63,8 @@ def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger) -> None:
 
 def test_timer_supports_deprecated_named(timer: Timer, trigger: DummyTrigger) -> None:
     label = "name_1"
-    with pytest.deprecated_call():
-        with timer.named(label):
-            pass
+    with pytest.deprecated_call(), timer.named(label):
+        pass
 
     assert trigger.calls[0][2] == label
 
@@ -76,11 +74,8 @@ def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger) 
     label_2 = "name_2"
     label_3 = "name_3"
 
-    with timer.label(label_1):
-        with timer:
-            with timer.label(label_2):
-                with timer.label(label_3):
-                    pass
+    with timer.label(label_1), timer, timer.label(label_2), timer.label(label_3):
+        pass
 
     assert trigger.calls[0][2] == label_3
     assert trigger.calls[1][2] == label_2
@@ -89,9 +84,8 @@ def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger) 
 
 
 def test_timer_protects_unfinished_duration(timer: Timer) -> None:
-    with pytest.raises(ClockStillRunning):
-        with timer as clock:
-            _ = clock.duration()
+    with pytest.raises(ClockStillRunning), timer as clock:
+        _ = clock.duration()
 
 
 def test_timer_stores_duration(timer: Timer) -> None:
