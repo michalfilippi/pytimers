@@ -3,9 +3,8 @@ decorator>=4.0.0
 
 # test dependencies
 black
-flake8
-flake8-import-order
 mypy
 pytest
 pytest-asyncio
 pytest-cov
+ruff

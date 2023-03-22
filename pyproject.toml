@@ -1,0 +1,26 @@
+[tool.mypy]
+strict = true
+
+
+[tool.ruff]
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "T20",  # flake8-print
+    "PT",  # flake8-pytest-style
+]
+
+
+[tool.pytest.ini_options]
+addopts = "--cov pytimers --asyncio-mode=auto"
+testpaths = ["tests"]
+
+
+[tool.coverage.report]
+fail_under = 100
+exclude_lines = ["pass"]
+show_missing = true
