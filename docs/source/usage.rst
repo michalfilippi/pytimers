@@ -113,13 +113,13 @@ Entering the context manager actually returns an instance of a :py:class:`pytime
     if __name__ == "__main__":
         with timer as t:
             sleep(1)
-            print(f"We want to run this under 5s and so far it took {t.current_duration}.")
+            print(f"We want to run this under 5s and so far it took {t.current_duration(precision=2)}s.")
             sleep(1)
-        print(f"We still had {5 - t.duration}s remaining.")
+        print(f"We still had {5 - t.duration()}s remaining.")
 
 .. code-block:: console
 
-    We want to run this under 5s and so far it took 1.0001475979988754.
+    We want to run this under 5s and so far it took 1.00s.
     INFO:pytimers.triggers.logger_trigger:Finished code block in 2s 1.384ms [2.001s].
     We still had 2.998615708000216s remaining.
 
