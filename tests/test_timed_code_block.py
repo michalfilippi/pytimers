@@ -36,9 +36,17 @@ def test_timer_preserves_exception(timer: Timer, trigger: DummyTrigger) -> None:
     assert len(trigger.calls) == 1
 
 
-def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger) -> None:
+def test_timer_supports_deprecated_lable(timer: Timer, trigger: DummyTrigger) -> None:
     label = "name_1"
     with timer.label(label):
+        pass
+
+    assert trigger.calls[0]["label"] == label
+
+
+def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger) -> None:
+    label = "name_1"
+    with timer(label=label):
         pass
 
     assert trigger.calls[0]["label"] == label
@@ -49,7 +57,7 @@ def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger) 
     label_2 = "name_2"
     label_3 = "name_3"
 
-    with timer.label(label_1), timer(), timer.label(label_2), timer.label(label_3):
+    with timer(label=label_1), timer(), timer(label=label_2), timer(label=label_3):
         pass
 
     assert trigger.calls[0]["label"] == label_3
@@ -89,7 +97,7 @@ def test_timer_current_duration_round(timer: Timer) -> None:
 
 async def test_timer_is_robust_to_async(timer: Timer, trigger: DummyTrigger) -> None:
     async def async_sleep(seconds: float, label: str) -> None:
-        with timer.label(label):
+        with timer(label=label):
             await sleep(seconds)
 
     await gather(
