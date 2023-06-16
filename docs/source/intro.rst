@@ -4,7 +4,7 @@ Getting started
 Requirements
 ------------
 
-Pytimers require Python 3.7+ for :py:class:`contextvars.ContextVar` and `decorator>=4.0.0 <https://github.com/micheles/decorator>`_ library.
+Pytimers require Python 3.8 and `decorator>=4.0.0 <https://github.com/micheles/decorator>`_ library.
 
 
 Installation
