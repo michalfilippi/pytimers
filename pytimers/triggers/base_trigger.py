@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Any, Optional
 
 
 class BaseTrigger(ABC):
@@ -18,6 +18,7 @@ class BaseTrigger(ABC):
         duration_s: float,
         decorator: bool,
         label: Optional[str] = None,
+        **kwargs: Any,
     ) -> None:
         """This is a trigger action entrypoint. This method is called in
         :py:class:`pytimers.Timer` once the timer stops.
