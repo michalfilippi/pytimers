@@ -1,6 +1,6 @@
-class ClockStillRunning(Exception):
-    """Custom exception to be raised while accessing properties of
-    :py:class:`pytimers.clock.Clock` before being stopped.
+class ClockNotRunning(Exception):
+    """Custom exception to be raised on attempt to read timer duration before
+    starting it.
     """
 
     pass

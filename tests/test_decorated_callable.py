@@ -34,7 +34,7 @@ def create_test_cases() -> (  # noqa: C901
             """Callable docstring."""
             return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return callable_name  # type: ignore
+        return callable_name
 
     def create_callable_method(timer: Timer) -> Callable[..., int]:
         class ClassWithMethod:
@@ -50,7 +50,7 @@ def create_test_cases() -> (  # noqa: C901
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithMethod().callable_name  # type: ignore
+        return ClassWithMethod().callable_name
 
     def create_callable_static_method_from_class(timer: Timer) -> Callable[..., int]:
         class ClassWithStaticMethod:
@@ -66,7 +66,7 @@ def create_test_cases() -> (  # noqa: C901
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithStaticMethod.callable_name  # type: ignore
+        return ClassWithStaticMethod.callable_name
 
     def create_callable_static_method_from_instance(timer: Timer) -> Callable[..., int]:
         class ClassWithStaticMethod:
@@ -82,7 +82,7 @@ def create_test_cases() -> (  # noqa: C901
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithStaticMethod().callable_name  # type: ignore
+        return ClassWithStaticMethod().callable_name
 
     def create_callable_class_method_from_class(timer: Timer) -> Callable[..., int]:
         class ClassWithClassMethod:
@@ -99,7 +99,7 @@ def create_test_cases() -> (  # noqa: C901
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithClassMethod.callable_name  # type: ignore
+        return ClassWithClassMethod.callable_name
 
     def create_callable_class_method_from_instance(timer: Timer) -> Callable[..., int]:
         class ClassWithClassMethod:
@@ -116,7 +116,7 @@ def create_test_cases() -> (  # noqa: C901
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithClassMethod().callable_name  # type: ignore
+        return ClassWithClassMethod().callable_name
 
     return [
         (create_callable_function, [], "function"),
