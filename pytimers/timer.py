@@ -51,22 +51,17 @@ class Timer:
         label: Optional[str] = None,
         **kwargs: Any,
     ) -> Union[Callable[..., ReturnT], ParameterizedTimer]:
-        params = {
-            **self._default_args,
-            **kwargs,
-        }
+        pt = ParameterizedTimer(
+            triggers=self._triggers,
+            label=label,
+            **{
+                **self._default_args,
+                **kwargs,
+            },
+        )
         if wrapped is None:
-            return ParameterizedTimer(
-                triggers=self._triggers,
-                label=label,
-                **params,
-            )
+            return pt
         else:
-            pt = ParameterizedTimer(
-                triggers=self._triggers,
-                label=label,
-                **params,
-            )
             return pt(wrapped)
 
     def label(self, text: str) -> ParameterizedTimer:
