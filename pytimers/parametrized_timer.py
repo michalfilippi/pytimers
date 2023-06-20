@@ -114,12 +114,12 @@ class ParameterizedTimer:
         """Exposes measured time of the clock. You can use this method to access the
         measured time even after the context manager is closed. This property should
         never be used directly inside a timed code block as it would raise an
-        :py:exc:`pytimers.exceptions.ClockStillRunning` exception.
+        :py:exc:`pytimers.exceptions.ClockNotRunning` exception.
 
         :param precision: Number of decimal places of the returned time. If set to
             ``None`` the full precision is returned.
         :return: Measured time in seconds between start and stop of the clock.
-        :raise pytimers.exceptions.ClockStillRunning: Clock has to be stopped before
+        :raise pytimers.exceptions.ClockNotRunning: Clock has to be stopped before
             accessing elapsed time.
         """
 
@@ -149,8 +149,8 @@ class ParameterizedTimer:
 
         warn(
             message=(
-                "The `named` method will no longer be supported in future versions. "
-                "Please use `label` method instead."
+                "The `current_duration` method will no longer be supported in future "
+                "versions. Please use `duration` method instead."
             ),
             category=DeprecationWarning,
         )
