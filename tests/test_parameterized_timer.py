@@ -1,7 +1,7 @@
 import pytest
 
 from pytimers.exceptions import ClockNotRunning
-from pytimers.parametrized_timer import ParameterizedTimer
+from pytimers.parameterized_timer import ParameterizedTimer
 
 
 def test_duration_raises_exception_before_clock_start() -> None:
