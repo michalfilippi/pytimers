@@ -2,7 +2,7 @@ from asyncio import gather, sleep
 
 import pytest
 
-from pytimers.timer import Timer
+from pytimers.timer_factory import TimerFactory
 from pytimers.triggers.dummy_trigger import DummyTrigger
 
 
@@ -12,12 +12,12 @@ def trigger() -> DummyTrigger:
 
 
 @pytest.fixture()
-def timer(trigger: DummyTrigger) -> Timer:
-    return Timer(triggers=[trigger])
+def timer(trigger: DummyTrigger) -> TimerFactory:
+    return TimerFactory(triggers=[trigger])
 
 
 def test_timer_calls_trigger_with_correct_params(
-    timer: Timer, trigger: DummyTrigger
+    timer: TimerFactory, trigger: DummyTrigger
 ) -> None:
     with timer():
         pass
@@ -29,14 +29,14 @@ def test_timer_calls_trigger_with_correct_params(
     assert trigger.calls[0]["label"] is None
 
 
-def test_timer_preserves_exception(timer: Timer, trigger: DummyTrigger) -> None:
+def test_timer_preserves_exception(timer: TimerFactory, trigger: DummyTrigger) -> None:
     with pytest.raises(ValueError, match="msg"), timer():
         raise ValueError("msg")
 
     assert len(trigger.calls) == 1
 
 
-def test_timer_supports_deprecated_label(timer: Timer, trigger: DummyTrigger) -> None:
+def test_timer_supports_deprecated_label(timer: TimerFactory, trigger: DummyTrigger) -> None:
     label = "name_1"
     with timer.label(label):
         pass
@@ -44,7 +44,7 @@ def test_timer_supports_deprecated_label(timer: Timer, trigger: DummyTrigger) ->
     assert trigger.calls[0]["label"] == label
 
 
-def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger) -> None:
+def test_timer_uses_proper_label(timer: TimerFactory, trigger: DummyTrigger) -> None:
     label = "name_1"
     with timer(label=label):
         pass
@@ -52,7 +52,7 @@ def test_timer_uses_proper_label(timer: Timer, trigger: DummyTrigger) -> None:
     assert trigger.calls[0]["label"] == label
 
 
-def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger) -> None:
+def test_timer_uses_proper_name_in_nesting(timer: TimerFactory, trigger: DummyTrigger) -> None:
     label_1 = "name_1"
     label_2 = "name_2"
     label_3 = "name_3"
@@ -66,36 +66,36 @@ def test_timer_uses_proper_name_in_nesting(timer: Timer, trigger: DummyTrigger) 
     assert trigger.calls[3]["label"] == label_1
 
 
-def test_timer_stores_duration(timer: Timer) -> None:
+def test_timer_stores_duration(timer: TimerFactory) -> None:
     with timer() as clock:
         pass
 
     assert clock.duration() > 0
 
 
-def test_timer_duration_round(timer: Timer) -> None:
+def test_timer_duration_round(timer: TimerFactory) -> None:
     with timer() as clock:
         pass
 
     assert clock.duration(0) == 0
 
 
-def test_timer_exposes_current_duration(timer: Timer) -> None:
+def test_timer_exposes_current_duration(timer: TimerFactory) -> None:
     with timer() as clock:
         assert clock.current_duration() > 0
 
 
-def test_timer_clock_is_running(timer: Timer) -> None:
+def test_timer_clock_is_running(timer: TimerFactory) -> None:
     with timer() as clock:
         assert clock.current_duration() != clock.current_duration()
 
 
-def test_timer_current_duration_round(timer: Timer) -> None:
+def test_timer_current_duration_round(timer: TimerFactory) -> None:
     with timer() as clock:
         assert clock.current_duration(0) == 0
 
 
-async def test_timer_is_robust_to_async(timer: Timer, trigger: DummyTrigger) -> None:
+async def test_timer_is_robust_to_async(timer: TimerFactory, trigger: DummyTrigger) -> None:
     async def async_sleep(seconds: float, label: str) -> None:
         with timer(label=label):
             await sleep(seconds)

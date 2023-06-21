@@ -18,7 +18,7 @@ from pytimers.triggers import BaseTrigger
 ReturnT = TypeVar("ReturnT")
 
 
-class Timer:
+class TimerFactory:
     """
     .. automethod:: __call__
     """

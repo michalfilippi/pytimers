@@ -1,9 +1,9 @@
-from .timer import Timer
+from .timer_factory import TimerFactory
 from .triggers.base_trigger import BaseTrigger
 from .triggers.logger_trigger import LoggerTrigger
 
 # provide default Timer instance containing logger Trigger
-timer = Timer(
+timer = TimerFactory(
     triggers=[
         LoggerTrigger(),
     ]
@@ -11,7 +11,7 @@ timer = Timer(
 
 
 __all__ = [
-    "Timer",
+    "TimerFactory",
     "timer",
     "BaseTrigger",
     "LoggerTrigger",
