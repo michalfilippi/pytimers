@@ -12,7 +12,7 @@ from typing import (
 )
 from warnings import warn
 
-from pytimers.parameterized_timer import ParameterizedTimer
+from pytimers.timer import Timer
 from pytimers.triggers import BaseTrigger
 
 ReturnT = TypeVar("ReturnT")
@@ -45,7 +45,7 @@ class TimerFactory:
         *,
         label: Optional[str] = None,
         **kwargs: Any,
-    ) -> ParameterizedTimer:
+    ) -> Timer:
         pass
 
     def __call__(
@@ -54,8 +54,8 @@ class TimerFactory:
         *,
         label: Optional[str] = None,
         **kwargs: Any,
-    ) -> Union[Callable[..., ReturnT], ParameterizedTimer]:
-        pt = ParameterizedTimer(
+    ) -> Union[Callable[..., ReturnT], Timer]:
+        pt = Timer(
             triggers=self._triggers,
             label=label,
             **{
@@ -68,7 +68,7 @@ class TimerFactory:
         else:
             return pt(wrapped)
 
-    def label(self, text: str) -> ParameterizedTimer:
+    def label(self, text: str) -> Timer:
         """This method is just an alias for the __call__ method with simplified
         interface. This method is deprecated and exists only for the backward
         compatibility and should not be used.

@@ -22,7 +22,7 @@ from pytimers.triggers import BaseTrigger
 ReturnT = TypeVar("ReturnT")
 
 
-class ParameterizedTimer:
+class Timer:
     def __init__(
         self,
         triggers: Iterable[BaseTrigger],
@@ -35,7 +35,7 @@ class ParameterizedTimer:
         self._start_time: Optional[float] = None
         self._duration: Optional[float] = None
 
-    def __enter__(self) -> "ParameterizedTimer":
+    def __enter__(self) -> "Timer":
         self._start_time = default_timer()
         return self
 
