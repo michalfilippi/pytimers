@@ -8,3 +8,7 @@ pytest
 pytest-asyncio
 pytest-cov
 ruff
+
+# docs dependencies
+sphinx
+sphinx_rtd_theme
