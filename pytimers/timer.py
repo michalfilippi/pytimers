@@ -12,13 +12,17 @@ from typing import (
 )
 from warnings import warn
 
-from pytimers.parametrized_timer import ParameterizedTimer
+from pytimers.parameterized_timer import ParameterizedTimer
 from pytimers.triggers import BaseTrigger
 
 ReturnT = TypeVar("ReturnT")
 
 
 class Timer:
+    """
+    .. automethod:: __call__
+    """
+
     def __init__(
         self,
         triggers: Iterable[BaseTrigger] = (),
@@ -65,17 +69,38 @@ class Timer:
             return pt(wrapped)
 
     def label(self, text: str) -> ParameterizedTimer:
-        """
+        """This method is just an alias for the __call__ method with simplified
+        interface. This method is deprecated and exists only for the backward
+        compatibility and should not be used.
 
-        :param text:
-        :return:
+        This makes the two following code snippets equivalent.
+
+        .. highlight:: python
+        .. code-block:: python
+
+            from pytimers import Timer
+            timer = Timer()
+            with timer.label("example")
+                pass
+
+        .. highlight:: python
+        .. code-block:: python
+
+            from pytimers import Timer
+            timer = Timer()
+            with timer(label="example")
+                pass
+
+        :param text: Label text.
+        :return: Returns ``ParametrizedTimer``.
 
         .. deprecated:: 4.0
         """
+
         warn(
             message=(
-                "The `named` method will no longer be supported in future versions. "
-                "Please use `label` method instead."
+                "The `label` method will no longer be supported in future versions. "
+                "Please use __call__ method instead with `label` param set."
             ),
             category=DeprecationWarning,
         )
