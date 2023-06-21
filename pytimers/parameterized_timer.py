@@ -75,7 +75,7 @@ class ParameterizedTimer:
         end_time = default_timer()
         self._execute_triggers(
             end_time - start_time,
-            self.label if self.label is None else wrapped.__qualname__,
+            self.label if self.label is not None else wrapped.__qualname__,
             True,
         )
         return output
@@ -91,7 +91,7 @@ class ParameterizedTimer:
         end_time = default_timer()
         self._execute_triggers(
             end_time - start_time,
-            self.label if self.label is None else wrapped.__qualname__,
+            self.label if self.label is not None else wrapped.__qualname__,
             True,
         )
         return output
