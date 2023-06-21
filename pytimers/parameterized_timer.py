@@ -49,7 +49,7 @@ class ParameterizedTimer:
             raise ClockNotRunning
         else:
             self._duration = self.duration()
-            self._finish_timing(
+            self._execute_triggers(
                 self._duration,
                 self.label,
                 False,
@@ -73,7 +73,7 @@ class ParameterizedTimer:
         start_time = default_timer()
         output = wrapped(*args, **kwargs)
         end_time = default_timer()
-        self._finish_timing(
+        self._execute_triggers(
             end_time - start_time,
             self.label if self.label is None else wrapped.__qualname__,
             True,
@@ -89,14 +89,14 @@ class ParameterizedTimer:
         start_time = default_timer()
         output = await wrapped(*args, **kwargs)
         end_time = default_timer()
-        self._finish_timing(
+        self._execute_triggers(
             end_time - start_time,
             self.label if self.label is None else wrapped.__qualname__,
             True,
         )
         return output
 
-    def _finish_timing(
+    def _execute_triggers(
         self,
         duration: float,
         name: Optional[str],
