@@ -9,10 +9,11 @@ Timers
 .. autoclass:: pytimers.Timer
     :members:
 
-.. autoclass:: pytimers.clock.Clock
+.. autoclass:: pytimers.TimerFactory
     :members:
+    :special-members: __call__
 
-.. autoexception:: pytimers.exceptions.ClockStillRunning
+.. autoexception:: pytimers.TimerNotRunning
 
 Triggers
 --------
@@ -22,5 +23,11 @@ Triggers
     :special-members: __call__
 
 .. autoclass:: pytimers.LoggerTrigger
+    :members:
+
+.. autoclass:: pytimers.PrinterTrigger
+    :members:
+
+.. autoclass:: pytimers.ProfilerTrigger
     :members:
 

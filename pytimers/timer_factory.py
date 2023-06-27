@@ -19,15 +19,16 @@ ReturnT = TypeVar("ReturnT")
 
 
 class TimerFactory:
-    """
-    .. automethod:: __call__
-    """
-
     def __init__(
         self,
         triggers: Iterable[BaseTrigger] = (),
         default_args: Optional[Dict[str, Any]] = None,
     ) -> None:
+        """
+
+        :param triggers:
+        :param default_args:
+        """
         self._triggers = list(triggers)
         self._default_args = {} if default_args is None else default_args
 
@@ -69,9 +70,9 @@ class TimerFactory:
             return pt(wrapped)
 
     def label(self, text: str) -> Timer:
-        """This method is just an alias for the __call__ method with simplified
-        interface. This method is deprecated and exists only for the backward
-        compatibility and should not be used.
+        """Calls internally :py:meth:`pytimers.TimerFactory.__call__` while renaming
+        `text` parameter to `label` parameter. This method exists only for a backward
+        compatibility and will be removed in future versions.
 
         This makes the two following code snippets equivalent.
 
@@ -100,7 +101,7 @@ class TimerFactory:
         warn(
             message=(
                 "The `label` method will no longer be supported in future versions. "
-                "Please use __call__ method instead with `label` param set."
+                "Please use `__call__` method instead with `label` param set."
             ),
             category=DeprecationWarning,
         )

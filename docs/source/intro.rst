@@ -15,3 +15,9 @@ You can use PyPi to install the library directly using:
 .. code-block:: console
 
    pip install pytimers
+
+
+Introduction
+------------
+
+Give some quick demo on how it works
