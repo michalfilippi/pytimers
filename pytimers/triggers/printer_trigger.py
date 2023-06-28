@@ -41,7 +41,7 @@ class PrinterTrigger(BaseTrigger):
         if label is None and decorator is False:
             label = self.default_code_block_label
 
-        print(
+        print(  # noqa: T201
             self.template.substitute(
                 duration=round(duration_s, self.precision),
                 humanized_duration=self.humanized_duration(

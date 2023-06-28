@@ -25,9 +25,11 @@ ReturnT = TypeVar("ReturnT")
 class Timer:
     """Class represents
 
-    It is not recommended to use this class directly. TimerFactory should be used instead to allow reuse
+    It is not recommended to use this class directly. TimerFactory should be used
+    instead to allow reuse
 
-    The Timer instance can be used in two different ways, as a decorator and a context manager.
+    The Timer instance can be used in two different ways, as a decorator and a context
+    manager.
 
 
     .. highlight:: python
@@ -75,11 +77,15 @@ class Timer:
         label: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        """Inits Timer object with a collection of triggers to be executed at the end of the time measurement.
+        """Inits Timer object with a collection of triggers to be executed at the end
+        of the time measurement.
 
-        :param triggers: A collection of :py:class:`BaseTrigger` to be executed at the end of the time measurement.
-        :param label: String label to override callable name in the decorator usage or a label
-        :param kwargs: Additional arguments, these will all be passed to each trigger execution and can serve as more fine grained trigger configuration.
+        :param triggers: A collection of :py:class:`BaseTrigger` to be executed at the
+            end of the time measurement.
+        :param label: String label to override callable name in the decorator usage or
+            a label.
+        :param kwargs: Additional arguments, these will all be passed to each trigger
+            execution and can serve as more fine-grained trigger configuration.
         """
 
         self._triggers = triggers

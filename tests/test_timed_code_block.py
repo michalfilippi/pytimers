@@ -52,7 +52,10 @@ def test_timer_uses_proper_label(timer: TimerFactory, trigger: DummyTrigger) -> 
     assert trigger.calls[0]["label"] == label
 
 
-def test_timer_uses_proper_name_in_nesting(timer: TimerFactory, trigger: DummyTrigger) -> None:
+def test_timer_uses_proper_name_in_nesting(
+    timer: TimerFactory,
+    trigger: DummyTrigger,
+) -> None:
     label_1 = "name_1"
     label_2 = "name_2"
     label_3 = "name_3"
@@ -95,7 +98,10 @@ def test_timer_current_duration_round(timer: TimerFactory) -> None:
         assert clock.current_duration(0) == 0
 
 
-async def test_timer_is_robust_to_async(timer: TimerFactory, trigger: DummyTrigger) -> None:
+async def test_timer_is_robust_to_async(
+    timer: TimerFactory,
+    trigger: DummyTrigger,
+) -> None:
     async def async_sleep(seconds: float, label: str) -> None:
         with timer(label=label):
             await sleep(seconds)

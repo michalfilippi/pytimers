@@ -9,5 +9,4 @@ def test_() -> None:
     trigger(1.0, False, profiler_part="b")
 
     j = trigger.data.to_json()
-    print(j)
     assert False
