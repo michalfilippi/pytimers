@@ -24,10 +24,10 @@ class ProfilerItem:
             self.nested[key] = ProfilerItem()
         return self.nested[key].add(keys, value)
 
-    def to_json(self) -> dict:
+    def to_json(self) -> dict:  # type: ignore
         return self._to_json([])
 
-    def _to_json(self, prefixes: list[str]) -> dict:
+    def _to_json(self, prefixes: list[str]) -> dict:  # type: ignore
         return {
             "full_name": ".".join(prefixes),
             "total": self.total,
