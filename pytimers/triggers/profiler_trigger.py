@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional, Iterator
+from typing import Any, Dict, Iterator, Optional
 
 from pytimers.triggers.base_trigger import BaseTrigger
 

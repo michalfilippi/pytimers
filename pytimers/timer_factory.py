@@ -1,15 +1,6 @@
 from __future__ import annotations
 
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterable,
-    Optional,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import (Any, Callable, Dict, Iterable, Optional, overload, TypeVar, Union)
 from warnings import warn
 
 from pytimers.timer import Timer
