@@ -36,7 +36,10 @@ def test_timer_preserves_exception(timer: TimerFactory, trigger: DummyTrigger) -
     assert len(trigger.calls) == 1
 
 
-def test_timer_supports_deprecated_label(timer: TimerFactory, trigger: DummyTrigger) -> None:
+def test_timer_supports_deprecated_label(
+    timer: TimerFactory,
+    trigger: DummyTrigger,
+) -> None:
     label = "name_1"
     with timer.label(label):
         pass
