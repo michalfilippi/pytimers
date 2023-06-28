@@ -202,7 +202,7 @@ class Timer:
         :raise pytimers.exceptions.TimerNotRunning: Timer has to be started before
             accessing elapsed time. This can happen when calling this method before
             entering the context manager.
-        """
+        """  # noqa: E501
 
         if self._start_time is None:
             raise TimerNotRunning
