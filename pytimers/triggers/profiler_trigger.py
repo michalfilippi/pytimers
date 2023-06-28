@@ -35,7 +35,7 @@ class ProfilerItem:
             "children": [
                 profiler_item._to_json(prefixes + [key])
                 for key, profiler_item in self.nested.items()
-            ]
+            ],
         }
 
 
@@ -58,4 +58,3 @@ class ProfilerTrigger(BaseTrigger):
 
     def reset(self) -> None:
         self.data = ProfilerItem()
-
