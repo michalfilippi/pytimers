@@ -1,15 +1,15 @@
-.PHONY: test black mypy flake8 all
+.PHONY: test black mypy ruff all
 
 test:
-	python -m pytest tests --cov pytimers --cov-report term-missing --no-cov-on-fail
+	python -m pytest
 
 black:
-	black pytimers tests
+	black pytimers tests --diff
 
 mypy:
 	mypy pytimers tests
 
-flake8:
-	flake8 pytimers tests
+ruff:
+	ruff pytimers tests
 
-all: test black mypy flake8
+all: test black mypy ruff

@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Release 4.0.0
+-------------
+
+* Deprecating :py:meth:`pytimers.Timer.label` for :py:meth:`pytimers.Timer.__call__` with param `label`.
+* Removed deprecated :py:meth:`pytimers.Timer.named`
+* Added :py:class:`pytimers.triggers.printer_trigger.PrinterTrigger`.
+* Added :py:class:`pytimers.triggers.profiler_trigger.ProfilerTrigger`.
+
 Release 3.1
 -----------
 

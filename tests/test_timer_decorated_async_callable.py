@@ -19,9 +19,9 @@ def timer(trigger: DummyTrigger) -> Timer:
     return Timer(triggers=[trigger])
 
 
-def create_test_cases() -> list[
-    tuple[Callable[[Timer], Callable[..., Awaitable[int]]], list[str], str]
-]:
+def create_test_cases() -> (  # noqa: C901
+    list[tuple[Callable[[Timer], Callable[..., Awaitable[int]]], list[str], str]]
+):
     def create_callable_function(
         timer: Timer,
     ) -> Callable[..., Awaitable[int]]:
@@ -36,7 +36,7 @@ def create_test_cases() -> list[
             """Callable docstring."""
             return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return callable_name  # type: ignore
+        return callable_name
 
     def create_callable_method(
         timer: Timer,
@@ -54,7 +54,7 @@ def create_test_cases() -> list[
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithMethod().callable_name  # type: ignore
+        return ClassWithMethod().callable_name
 
     def create_callable_static_method_from_class(
         timer: Timer,
@@ -68,7 +68,7 @@ def create_test_cases() -> list[
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithStaticMethod.callable_name  # type: ignore
+        return ClassWithStaticMethod.callable_name
 
     def create_callable_static_method_from_instance(
         timer: Timer,
@@ -86,7 +86,7 @@ def create_test_cases() -> list[
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithStaticMethod().callable_name  # type: ignore
+        return ClassWithStaticMethod().callable_name
 
     def create_callable_class_method_from_class(
         timer: Timer,
@@ -105,7 +105,7 @@ def create_test_cases() -> list[
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithClassMethod.callable_name  # type: ignore
+        return ClassWithClassMethod.callable_name
 
     def create_callable_class_method_from_instance(
         timer: Timer,
@@ -124,7 +124,7 @@ def create_test_cases() -> list[
                 """Callable docstring."""
                 return a + b + sum(args) + c + sum(kwargs.values())  # type: ignore
 
-        return ClassWithClassMethod().callable_name  # type: ignore
+        return ClassWithClassMethod().callable_name
 
     return [
         (create_callable_function, [], "function"),

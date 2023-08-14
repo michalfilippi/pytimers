@@ -1,9 +1,13 @@
-from .timer import Timer
-from .triggers.base_trigger import BaseTrigger
-from .triggers.logger_trigger import LoggerTrigger
+from pytimers.exceptions import TimerNotRunning
+from pytimers.timer import Timer
+from pytimers.timer_factory import TimerFactory
+from pytimers.triggers.base_trigger import BaseTrigger
+from pytimers.triggers.logger_trigger import LoggerTrigger
+from pytimers.triggers.printer_trigger import PrinterTrigger
+from pytimers.triggers.profiler_trigger import ProfilerTrigger
 
-# provide default instance for the simplicity containing logger Trigger
-timer = Timer(
+# provide default Timer instance containing logger Trigger
+timer = TimerFactory(
     triggers=[
         LoggerTrigger(),
     ]
@@ -12,7 +16,11 @@ timer = Timer(
 
 __all__ = [
     "Timer",
+    "TimerFactory",
     "timer",
     "BaseTrigger",
     "LoggerTrigger",
+    "ProfilerTrigger",
+    "PrinterTrigger",
+    "TimerNotRunning",
 ]
